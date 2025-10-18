@@ -1,7 +1,9 @@
 import 'package:ad_invoice_mobile/controllers/dashboardcontroller.dart';
 import 'package:ad_invoice_mobile/controllers/notificationcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/registerscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicefirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalfirstscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/receipt/receiptfirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/clientscreen.dart';
 
 import 'package:ad_invoice_mobile/ui/screens/dashboard/homescreen.dart';
@@ -164,7 +166,7 @@ class Dashboardmain extends StatelessWidget {
         backgroundColor: Colors.blue,
         label: "Receipts",
         onTap: (){
-          
+          Get.to(()=>Receiptfirstscreen());
         },
         child: Icon(Icons.payment),
         labelStyle: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)
@@ -182,17 +184,15 @@ class Dashboardmain extends StatelessWidget {
       SpeedDialChild(
         backgroundColor: Colors.blue,
         label: "New Invoice",
-        onTap: (){},
+        onTap: (){
+          Get.to(Invoicefirstscreen());
+        },
         child: Icon(Icons.description),
         labelStyle: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)
       ),
     ],
    ),
-      
-
-
-        
-    );
+ );
     
   }
 }

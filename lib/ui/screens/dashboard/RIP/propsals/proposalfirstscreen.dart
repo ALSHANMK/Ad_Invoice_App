@@ -1,3 +1,4 @@
+import 'package:ad_invoice_mobile/controllers/userscontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalsecondscreen.dart';
 import 'package:flutter/material.dart';
@@ -7,17 +8,10 @@ import 'package:get/utils.dart';
 class Proposalfirstscreen extends StatelessWidget {
    Proposalfirstscreen({super.key});
 
-  final List<Map<String,dynamic>> clients=[
-    {
-        "name":"John",
-        "Company":"Microsoft",
-        "Location":"Hyderabad",
-        "age": 32,
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final Userscontroller userscontroller=Get.put(Userscontroller());
+    
     final screenheight=MediaQuery.of(context).size.height;
     final screenwidth=MediaQuery.of(context).size.width;
     return Scaffold(
@@ -40,6 +34,9 @@ class Proposalfirstscreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10)
                   )
                 ),
+                onChanged: (value) {
+                  userscontroller.filtering(value);
+                },
               ),
             ),
 
@@ -48,14 +45,20 @@ class Proposalfirstscreen extends StatelessWidget {
           Container(
             height: screenheight/2,
             color: Colors.grey[300],
-            child: ListView.builder(itemCount: clients.length,
+            child:Obx(()=>
+            ListView.builder(itemCount: userscontroller.filteredusers.length,
               itemBuilder: (context,index)
             {
-              final client=clients[index];
+              
+              final client=userscontroller.filteredusers[index];
               return Card(
                   elevation: 6,
                   margin: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-                  child: ListTile(
+                  child:Obx((){
+                    final isselected=userscontroller.selecteduser.value==index;
+                     return  ListTile(
+                    onTap: ()=>userscontroller.selection(index),
+                    tileColor: isselected?Colors.green[200]:Colors.grey[200],
                     isThreeLine: true,
                     title: Text("${client["name"]}",style: TextStyle(fontWeight: FontWeight.bold),),
                     subtitle: Column(
@@ -65,13 +68,19 @@ class Proposalfirstscreen extends StatelessWidget {
                         Text("${client["age"]}"),
                           Text(client["Company"]),
                            Text(client["Location"]),
+                           Text(client['bank']),
+                           Text(client['Branch']),
                             
                       ],
                     ),
-                    trailing: IconButton(onPressed: (){}, icon: Icon(Icons.square_outlined)),
-                  ),
+                    trailing: isselected?IconButton(onPressed: (){}, icon: Icon(Icons.check_box_rounded,color: Colors.green,)):
+                    Icon(Icons.check_box_outline_blank),
+                  );
+                  }) 
+                  
               );
-            })
+            }),
+            ), 
           ),
 
           SizedBox(height: 20,),
@@ -80,10 +89,18 @@ class Proposalfirstscreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(width: 10,),
-              Custombutton(label: "Cancel", onpressed: (){}),
+              Custombutton(label: "Cancel", onpressed: (){
+                Get.back();
+              }),
               SizedBox(width: 25,),
               Custombutton(label: "Next", onpressed: (){
-                Get.to(Proposalsecondscreen());
+                final selecteduser=userscontroller.userinfo;
+                if(selecteduser !=null){
+                  Get.to(Proposalsecondscreen(),arguments: selecteduser);
+                }
+                else{
+                  Get.snackbar("Error", "Please select a Client",backgroundColor: Colors.blue,snackPosition: SnackPosition.BOTTOM);
+                }
               })
             ],
           ),

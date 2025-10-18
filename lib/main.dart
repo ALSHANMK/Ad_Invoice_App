@@ -1,19 +1,31 @@
+import 'package:ad_invoice_mobile/controllers/dropdowncontroller.dart';
+import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/launchscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/emergency_invoice.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicefirstscreen.dart';
+
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalfirstscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/receipt/receiptfirstscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/receipt/recieptpreview.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/dashboardmain.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
+  Get.put(Dropdowncontroller());
+  Get.put(Radiobuttoncontroller());
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  
   const MyApp({super.key});
+  
 
   @override
   Widget build(BuildContext context) {
+
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
 
@@ -24,9 +36,10 @@ class MyApp extends StatelessWidget {
     const Breakpoint(start: 601, end: 1024, name: TABLET),  // tablet up to 1024
     const Breakpoint(start: 1025, end: double.infinity, name: DESKTOP),
   ],
+  
 ),
 
-      home: Launchscreen(),
+      home:Launchscreen(),
     );
   }
 }

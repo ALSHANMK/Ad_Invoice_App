@@ -1,17 +1,23 @@
 import 'package:ad_invoice_mobile/controllers/productcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/product_serviceedit.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalpreviewscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalthirdscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
+
 
 class Proposalsecondscreen extends StatelessWidget {
   Proposalsecondscreen({super.key});
 
-final Productcontroller productcontroller=Get.put(Productcontroller());
+
+
   @override
   Widget build(BuildContext context) {
+    final Radiobuttoncontroller radiobuttoncontroller=Get.put(Radiobuttoncontroller());
+   
+    Map<String,dynamic> user=Get.arguments;
     final screenheight=MediaQuery.of(context).size.height;
     final screenwidth=MediaQuery.of(context).size.width;
     return Scaffold(
@@ -31,7 +37,7 @@ final Productcontroller productcontroller=Get.put(Productcontroller());
             width: screenwidth/2*1.2,
             child: TextFormField(
               onChanged: (value){
-                productcontroller.filterproducts(value);
+                radiobuttoncontroller.filtering(value);
               },
                   decoration: InputDecoration(
                     hintText: "Search product/service",
@@ -49,37 +55,64 @@ final Productcontroller productcontroller=Get.put(Productcontroller());
 
                 height: screenheight/2*1.2,
                 color: Colors.grey[300],
-                child: Obx(()=>ListView.builder(itemCount: productcontroller.filteredproduct.length,
+                child: Obx(()=>ListView.builder(itemCount: radiobuttoncontroller.items.length,
                 itemBuilder: (context,index)
                 {
-                   final product=productcontroller.filteredproduct[index];
+                   final product=radiobuttoncontroller.items[index];
                   return Card(
                      elevation: 2,
                      margin: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-                     child: ListTile(
+                     child:Obx((){
+
+                      final isselected=radiobuttoncontroller.selecteditemindex.contains(index);
+                      return ListTile(
+                        shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        onTap: ()=>radiobuttoncontroller.selections(index),
+                        tileColor: isselected?Colors.green[200]:Colors.grey[200],
                       isThreeLine: true,
                       title: Text(product['name'],style: TextStyle(fontWeight: FontWeight.bold),),
                       subtitle: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Price:${product["price"]}"),
-                          Text("Quantity:${product["qnty"]}"),
-                          Text("Category:${product["category"]}"),
+                          if(product['Category']=='Product')
+                          ...[
+                            Text("Price:${product["Price"]}"),
+                          Text("Quantity:${product["Qnty"]}"),
+                          Text("Category:${product["Category"]}",style: TextStyle(fontWeight: FontWeight.bold),),
+                          ]
+                          else if(product['Category']=='Service')
+                          ...[
+                            Text("Rate per hour:${product["Rate"]}"),
+                          Text("Workers:${product["Workers"]}"),
+                          Text("Category:${product["Category"]}",style: TextStyle(fontWeight: FontWeight.bold),),
+                          ]
                           
                         ],
                       ),
-                      trailing: IconButton(onPressed: ()async{
-                      final updated=await  Get.to(()=>ProductServiceedit(),arguments: product);
-
-                      if(updated!=null)
-                      {
-                        productcontroller.updateproduct(product, updated);
-                      }
-                      }, icon: Icon(Icons.edit)),
-                     ),
+                      trailing: isselected?Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Icon(Icons.check_box_rounded,color: Colors.green,),
+                          IconButton(onPressed: () async{
+                          final updated=await Get.to(()=>ProductServiceedit(),arguments: product);
+                              
+                            if(updated!=null)
+                            {
+                                radiobuttoncontroller.updated(product, updated);
+                            }
+                            
+                          }, icon: Icon(Icons.edit,color: Colors.blue,),),
+                        ],
+                      ):Icon(Icons.circle_outlined,color: Colors.grey,)
+                     );
+                     }) 
                   );
-                }))
+                }
+                ),
+                ),
               
               ),
               
@@ -93,7 +126,12 @@ final Productcontroller productcontroller=Get.put(Productcontroller());
               Custombutton(label: "Clear", onpressed: (){}),
               SizedBox(width: 20,),
               Custombutton(label: "Next", onpressed: (){
-                Get.to(Proposalthirdscreen());
+
+                var selecteditems=radiobuttoncontroller.selecteditemindex.map((i)=>radiobuttoncontroller.items[i]).toList();
+                Get.to(()=>Proposalpreviewscreen(),arguments: {
+                  'items':selecteditems,
+                  'clients':user,
+                });
               }),
             ],
           ),

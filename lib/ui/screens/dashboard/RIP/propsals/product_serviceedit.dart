@@ -1,5 +1,7 @@
+import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 class ProductServiceedit extends StatelessWidget {
@@ -9,13 +11,23 @@ class ProductServiceedit extends StatelessWidget {
 
   final Map<String,dynamic>? product=Get.arguments;
 
+  //final Radiobuttoncontroller radiobuttoncontroller=Get.put(Radiobuttoncontroller());
+
   @override
   Widget build(BuildContext context) {
 
+
+    final rate=product!['Rate'];
+    final qnty=product!['Qnty'];
+    
+    print(qnty.runtimeType);
     final namecontroller=TextEditingController(text: product!['name']);
-    final pricecontroller=TextEditingController(text: product!['price'].toString());
-    final quantitycontroller=TextEditingController(text: product!['qnty'].toString());
-    final categorycontroller=TextEditingController(text: product!['category']);
+    final pricecontroller= TextEditingController(text: product!['Category']=='Product'?product!['Price'].toString():
+    
+  product!['Rate'].toString());
+    final quantitycontroller=TextEditingController(text: product!['Category']=='Product'?product!['Qnty'].toString():
+    product!['Workers'].toString());
+    final categorycontroller=TextEditingController(text: product!['Category']);
 
     if(product==null)
     {
@@ -40,7 +52,9 @@ class ProductServiceedit extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                label: Text("Name",style: TextStyle(fontWeight: FontWeight.bold),)),
+                label: Text("Name",style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                ),
             ),
             SizedBox(height: 10,),
             TextField(
@@ -49,7 +63,8 @@ class ProductServiceedit extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                label: Text("Price",style: TextStyle(fontWeight:FontWeight.bold),)),
+                label: product!['Category']=='Product'?Text("Price"):Text("Rate per hour"),
+                ),
             ),
             SizedBox(height: 10,),
             TextField(
@@ -58,7 +73,8 @@ class ProductServiceedit extends StatelessWidget {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
-                label: Text("Quantity",style: TextStyle(fontWeight: FontWeight.bold),),),
+                label: product!['Category']=='Product'?Text("Quantity"):Text("Workers"),
+                ),
             ),
             SizedBox(height: 10,),
             TextField(
@@ -72,13 +88,24 @@ class ProductServiceedit extends StatelessWidget {
             SizedBox(height: 10,),
             Custombutton(label: "Edit", onpressed: (){
 
-              final updated={
+              final updated=<String,dynamic>{
                 'name':namecontroller.text,
-                'price':int.tryParse(pricecontroller.text)?? 0,
-                'qnty':int.tryParse(quantitycontroller.text)??0,
-                'category':categorycontroller.text,
+                'Category':categorycontroller.text,
 
               };
+
+              if(product!['Category']=='Product')
+              {
+                 updated['Price']=int.tryParse(pricecontroller.text) ?? 0;
+                updated['Qnty']=int.tryParse(quantitycontroller.text)??0;
+              }
+
+              else if(product!['Category']=='Service')
+              {
+                updated["Rate"]=int.tryParse(pricecontroller.text)??0;
+                updated['Workers']=int.tryParse(quantitycontroller.text)??0;
+              }
+              
               Get.back(result: updated);
             })
           ],
