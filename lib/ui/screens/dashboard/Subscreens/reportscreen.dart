@@ -1,61 +1,77 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/reportanalyricscontroller.dart';
+import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 class Reportscreen extends StatelessWidget {
   Reportscreen({super.key});
 
-final data=<Sales>[
-  Sales(month: "Jan", sales: 50),
-  Sales(month: "Feb", sales: 40),
-  Sales(month: "Mar", sales: 50),
-  Sales(month: "Apr", sales: 60),
-  Sales(month: "May", sales: 65),
-
-];
+final Reportanalyricscontroller reportanalyricscontroller=Get.put(Reportanalyricscontroller());
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 300,
-          child: SfCartesianChart(
-      backgroundColor: Colors.white,
-      primaryXAxis: CategoryAxis(),
-      title: ChartTitle(text: "Monthly Sales"),
-      series: <CartesianSeries<Sales,dynamic>>[
-        ColumnSeries<Sales,String>(
-          dataSource: data,
-          xValueMapper: (Sales sales,_)=>sales.month, 
-          yValueMapper: (Sales sales,_)=>sales.sales)
-      ],
-    ),
-        ),
-        SizedBox(
-          height: 250,
-          child: SfCircularChart(
-            title: ChartTitle(text: "Monthly sales share"),
-            legend: Legend(isVisible: true),
-            series: <CircularSeries>[
-              PieSeries<Sales,String>(
-                dataSource: data,
-                xValueMapper: (Sales sales,_)=>sales.month,
-                yValueMapper: (Sales sales,_)=>sales.sales,
-              )
+    return Scaffold(
+      appBar: AppBar(title:Text("Report and Analysis"),
+      backgroundColor: Colors.blue,),
+      body: Column(
+        children: [
+          Obx(()=>SizedBox(
+            height: 300,
+            child: SfCartesianChart(
+        backgroundColor: Colors.white,
+        primaryXAxis: CategoryAxis(),
+        title: ChartTitle(text: "Monthly Share"),
+        series: <CartesianSeries<Chartdata,dynamic>>[
+          ColumnSeries<Chartdata,dynamic>(
+            dataSource: [ Chartdata(category: 'Proposal',count :reportanalyricscontroller.proposalcount.value.toDouble()),
+              Chartdata(category: 'Invoices',count: reportanalyricscontroller.invoicecount.toDouble()),
+           
+            Chartdata(category: 'Receipts',count:  reportanalyricscontroller.receiptcount.value.toDouble()),
             ],
-          ),
-
-        ),
-      ],
+            xValueMapper: (Chartdata data,_)=>data.category, 
+            yValueMapper: (Chartdata data,_)=>data.count,
+            
+            )
+        ],
+      ),
+          ),),
+          Obx(()=>SizedBox(
+            height: 250,
+            child: SfCircularChart(
+              title: ChartTitle(text: "Monthly share"),
+              legend: Legend(isVisible: true),
+              series: <CircularSeries>[
+                PieSeries<Chartdata,dynamic>(
+                  dataSource: [
+                    Chartdata(category: 'Proposal',count: reportanalyricscontroller.proposalcount.value.toDouble()),
+                    Chartdata(category: 'Invoices',count: reportanalyricscontroller.invoicecount.value.toDouble()),
+                  
+                  Chartdata(category: 'Receipts',count: reportanalyricscontroller.receiptcount.value.toDouble()),
+                ],
+                  xValueMapper: (Chartdata data,_)=>data.category,
+                  yValueMapper: (Chartdata data,_)=>data.count,
+                )
+              ],
+            ),
+      
+          ),),
+      
+          Custombutton(label: "back", onpressed: (){
+           Get.back();
+          })
+        ],
+      ),
     );
   }
 }
 
 
-class Sales{
-  final String month;
-  final double sales;
+class Chartdata{
+  final String? category;
+  final double? count;
 
-  Sales({
-    required this.month,
-   required this.sales
+  Chartdata({
+    this.category,
+    this.count,
   });
 }
+

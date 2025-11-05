@@ -1,3 +1,5 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/productlistcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/proposalsecondscreencontroller.dart';
 import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicesecondscreen.dart';
@@ -12,8 +14,7 @@ class EmergencyInvoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final Radiobuttoncontroller radiobuttoncontroller=Get.find<Radiobuttoncontroller>();
+    final Proposalsecondscreencontroller proposalsecondscreencontroller=Get.find<Proposalsecondscreencontroller>();
     final screenheight=MediaQuery.of(context).size.height;
 
     final namecontroller=TextEditingController();
@@ -73,17 +74,21 @@ class EmergencyInvoice extends StatelessWidget {
                     Obx(()=>SizedBox(
                       height: screenheight*0.4,
                       child: ListView.builder(
-                        itemCount: radiobuttoncontroller.filteredproduct.length,
+                        
+                        itemCount: proposalsecondscreencontroller.filteredproduct.length,
                         itemBuilder: (context,index)
                       {
-                        final item=radiobuttoncontroller.filteredproduct[index];
+                        final item=proposalsecondscreencontroller.filteredproduct[index];
                         return Card(
                           elevation: 6,
-                          
                           child: Obx((){
-                            final isselected=radiobuttoncontroller.selecteditemindex.contains(index);
+                            if(proposalsecondscreencontroller.isloading.value==false)
+                            {
+                              Center(child: CircularProgressIndicator(color: Colors.blue,));
+                            }
+                            final isselected=proposalsecondscreencontroller.selecteditemindex.contains(index);
                             return ListTile(
-                              onTap: ()=> radiobuttoncontroller.selections(index),
+                              onTap: ()=> proposalsecondscreencontroller.selections(index),
                               
                             title: Text(item['name']),
                             subtitle: item['Category']=='Product'?Text("Price :${item['Price']}\nCategory :${item['Category']}"):
@@ -92,17 +97,13 @@ class EmergencyInvoice extends StatelessWidget {
                             trailing: isselected?Icon(Icons.check_outlined,color: Colors.green,):Icon(Icons.circle_outlined),
                             shape: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)
-                            ),
-                            
-                            
-                            
+                            ),  
                           );
                           }) 
                         );
                       })
                     )),
-            SizedBox(height: 15),
-                   
+            SizedBox(height: 15),        
                   ],
                 ),
               ),
@@ -120,15 +121,14 @@ class EmergencyInvoice extends StatelessWidget {
                             'Company':phonecontroller.text,
                           };
 
-                          var selecteditems=radiobuttoncontroller.selecteditemindex.map((i)=>radiobuttoncontroller.items[i]).toList();
-
-                          Get.to(()=>Invoicesecondscreen(),arguments: {
+                          var selecteditems=proposalsecondscreencontroller.selecteditemindex.map((i)=>proposalsecondscreencontroller.items[i]).toList();
+                       Get.to(()=>Invoicesecondscreen(),arguments: {
                             'items':selecteditems,
                             'clients':client
                           });
                         }),
                       ],
-                    )
+                    ),
           ],
         ),
       ),

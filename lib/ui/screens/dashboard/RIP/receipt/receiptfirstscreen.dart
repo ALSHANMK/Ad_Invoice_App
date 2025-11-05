@@ -1,4 +1,8 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/getproposalcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/listclientcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/proposalcreationcontroller.dart';
 import 'package:ad_invoice_mobile/controllers/dropdowncontroller.dart';
+import 'package:ad_invoice_mobile/controllers/userscontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/emergency_invoice.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/receipt/receiptsecondscreen.dart';
@@ -10,98 +14,226 @@ class Receiptfirstscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenheight=MediaQuery.of(context).size.height;
+   
+    //final screenheight=MediaQuery.of(context).size.height;
     final screenwidth=MediaQuery.of(context).size.width;
+     final Userscontroller userscontroller=Get.find<Userscontroller>();
+     final TextEditingController searchcontroller=TextEditingController();
+    final Getproposalcontroller getproposalcontroller=Get.find<Getproposalcontroller>();
     
     final Dropdowncontroller dropdowncontroller=Get.find<Dropdowncontroller>();
+    List<dynamic> _getFilteredInvoices() {
+
+  final selectedIndex = userscontroller.selecteduser.value;
+  if (selectedIndex == -1) return [];
+  
+  final selectedClient = userscontroller.filteredusers[selectedIndex];
+  final clientName = selectedClient['name'];
+  
+
+  return getproposalcontroller.invoice.where((invoi) {
+    return invoi['client_name'] == clientName;
+  }).toList();
+}
     return Scaffold(
       appBar: AppBar(
         title: Text("Receipt"),
         backgroundColor: Colors.blue,
       ),
       body:Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: screenwidth/3*1.3,
-                  child: TextFormField(
-                    maxLength: 10,
-                    decoration: InputDecoration(
-                      label: Text("Clients"),
+          Card(
+            elevation: 2,
+            margin: EdgeInsets.all(8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: screenwidth/3*1.3,
+                    child: TextFormField(
+                      controller: searchcontroller,
+                      onChanged: (value) => {
+                        userscontroller.filtering(value)
+                      },
                       
-                      suffixIcon: Icon(Icons.person_search,color: Colors.blue,),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25),
-                      )
+                      decoration: InputDecoration(
+                        
+                        suffixIcon: Icon(Icons.search),
+                        labelText: "Search Client",
+                        contentPadding: EdgeInsetsGeometry.symmetric(horizontal: 12),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          
+                        )
+                      ),
                     ),
                   ),
                 ),
-              ),
-              ElevatedButton.icon(onPressed: (){
-                Get.to(()=>EmergencyInvoice());
-              }, label: Text("Emergency"),icon: Icon(Icons.emergency,color: Colors.red,size: 20,),),
-            ],
+                SizedBox(width: 12,),
+               ElevatedButton.icon(
+                icon: Icon(Icons.emergency,color: Colors.red,size: 20,),
+                onPressed: (){
+                  Get.to(()=>EmergencyInvoice());
+                }, label: Text("Emergency"))
+              ],
+            ),
           ),
-          
-          DropdownButton<String>(
-            iconSize: 32,
-            hint: Text("Select your invoice ",style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey[700]),),
-            elevation: 6,
-            icon: Icon(Icons.arrow_drop_down_sharp,color: Colors.blue,),
-            items: <String>['Invoice 1','Invoice 2','Invoice 3','Invoice 4'].map((String value)=>DropdownMenuItem<String>(value: value,child: Text(value))).toList(),
-            
-            onChanged:dropdowncontroller.changedvalue ),
-
-            SizedBox(height: 10,),
-
-            Container(
-              height: screenheight*0.35,
-              width: screenwidth*0.85,
+           SizedBox(height: 15,),
+          Expanded(
+            flex: 2,
+            child: Obx((){
+              final hassearch=searchcontroller.text.isNotEmpty;
+              final hasclient=userscontroller.filteredusers.isNotEmpty;
               
-              margin: EdgeInsetsGeometry.all(12),
-              child: Card(
-                surfaceTintColor: Colors.blue,
-                elevation: 6,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+              if(!hassearch)
+              {
+                return Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Search Clients above",style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),)
+                      ],
+                  ),
+                );
+              }
+              if(!hasclient)
+              {
+                return Center(
+                  child: Column(
                     children: [
-                      Text("Invoice ID: 3211",style: TextStyle(fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      Text("Shipping to:Mike",style: TextStyle(fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      Text("Location:Mumbai",style: TextStyle(fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      Text("Date:16/10/25",style: TextStyle(fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      Text("Due Date:30/10/25",style: TextStyle(fontWeight: FontWeight.bold),),
-                      SizedBox(height: 10,),
-                      Text("Phone:966732490",style: TextStyle(fontWeight: FontWeight.bold),),
+                        Text("Sorry,no clients has been found on that name",style: TextStyle(
+                          color: Colors.red,fontWeight: FontWeight.bold
+                        ),),
                     ],
                   ),
+                );
+              }
+             return  ListView.builder(
+              itemCount: userscontroller.filteredusers.length,
+              itemBuilder: (context,index)
+            {
+              
+              final client=userscontroller.filteredusers[index];
+              //final userid=client['id'];
+              return Card(
+              elevation: 2,
+              margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Client Details",style: TextStyle(fontWeight: FontWeight.bold),),
+                    SizedBox(height: 8,),
+                 Obx((){
+                  final isselected=userscontroller.selecteduser.value==index;
+                    return ListTile(
+                      
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                       onTap: ()async{
+                       try{
+            await getproposalcontroller.getinvo();
+             userscontroller.selection(index);
+                       }
+                       catch(e)
+                       {
+                        Get.snackbar("Error in getting invoice", "$e");
+                       }
+                       },
+                      tileColor: isselected?Colors.blue[100]:Colors.white,
+                      trailing: isselected?Icon(Icons.check_rounded,color: Colors.green,):Icon(Icons.check_box_outline_blank),
+                      contentPadding: EdgeInsets.zero,
+             title: Text("${client['name']} | ${client['location']}"),
+             
+              
+            );
+                 })
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: screenheight*0.15,),
-            Row(
+            );
+            });
+            }),
+          ),
+              Obx(()=> Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DropdownButtonFormField<String>(
+                      dropdownColor: Colors.grey[200],
+                      icon: Icon(Icons.arrow_drop_down),
+                      elevation: 6,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )
+                      ),
+                      hint: Text("Select Invoices",style: TextStyle(fontWeight: FontWeight.bold),),
+                      value:dropdowncontroller.selectedvalue.value ,
+                      onChanged: dropdowncontroller.changedvalue,
+                      items:_getFilteredInvoices().isEmpty 
+        ? [DropdownMenuItem(value: null, child: Text("No invoices available"))]
+        : _getFilteredInvoices().map<DropdownMenuItem<String>>((invoice) {
+            return DropdownMenuItem<String>(
+              value: invoice['id']?.toString(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${invoice['invoice_number']}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "Client: ${invoice['client_name']}",
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  Text(
+                    "Due: ${invoice['due_date']}",
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+                      ),
+                ),
+              ),
+
+              ),
+
+            SizedBox(height: 15,), 
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Custombutton(label: "Back", onpressed: (){}),
-                SizedBox(width: 10,),
-                Custombutton(label: "Next", onpressed: (){
-                  Get.to(()=>Receiptsecondscreen());
-                })
+                Custombutton(label: "Cancel", onpressed: (){}),
+                SizedBox(width: 15,),
+               Custombutton(label: "Next", onpressed: () async {
+              final selectedid = dropdowncontroller.selectedvalue.value;
+              
+              try {
+                if (selectedid != null && selectedid.isNotEmpty) {
+                  final items = await getproposalcontroller.getinvodetails(selectedid);
+                  Get.to(Receiptsecondscreen(), arguments: {
+                    'items': items,
+                  });
+                }
+              } catch (e) {
+                
+              }
+            })
               ],
-            )
-            
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }

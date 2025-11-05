@@ -8,12 +8,10 @@ class Receiptsecondscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args=Get.arguments;
+    final invoice=args['items']['invoice'];
     final screenheight=MediaQuery.of(context).size.height;
     final screenwidth=MediaQuery.of(context).size.width;
-    final total=10000;
-    final received=3500;
-    final payable=total-received;
-    final duedate="30/10/25";
     return Scaffold(
       appBar: AppBar(title: Text("Receipt"),backgroundColor:Colors.blue,),
       backgroundColor: Colors.blue[50],
@@ -45,7 +43,7 @@ class Receiptsecondscreen extends StatelessWidget {
                           SizedBox(height: 4,),
                           TextFormField(
                             readOnly: true,
-                            initialValue: "$total",
+                            initialValue: "${invoice['subtotal']}",
                             decoration: InputDecoration(
                               suffixIcon: Icon(Icons.monetization_on,color: Colors.blue,),
                               //label: Text("10000",style: TextStyle(fontWeight: FontWeight.bold),),
@@ -59,7 +57,7 @@ class Receiptsecondscreen extends StatelessWidget {
                           SizedBox(height: 4,),
                           TextFormField(
                             readOnly: true,
-                            initialValue: "$received",
+                            initialValue: "${invoice['amount_paid']}",
                             decoration: InputDecoration(
                               suffixIcon: Icon(Icons.payment_outlined,color: Colors.blue,),
                              // label: Text("3000",style: TextStyle(fontWeight: FontWeight.bold),),
@@ -73,7 +71,7 @@ class Receiptsecondscreen extends StatelessWidget {
                           SizedBox(height: 4,),
                           TextFormField(
                             readOnly: true,
-                            initialValue: "$payable",
+                            initialValue: "${invoice['balance_due']}",
                             decoration: InputDecoration(
                               suffixIcon: Icon(Icons.balance_sharp,color: Colors.blue,),
                               //label: Text("7000",style: TextStyle(fontWeight: FontWeight.bold),),
@@ -87,7 +85,7 @@ class Receiptsecondscreen extends StatelessWidget {
                           SizedBox(height: 4,),
                           TextFormField(
                             readOnly: true,
-                            initialValue: duedate,
+                            initialValue: "${invoice['due_date']}",
                             decoration: InputDecoration(
                               suffixIcon: Icon(Icons.calendar_month_outlined,color: Colors.blue,),
                               border: OutlineInputBorder(
@@ -119,7 +117,7 @@ class Receiptsecondscreen extends StatelessWidget {
                   }),
                   SizedBox(width: 15,),
                   Custombutton(label: "Next", onpressed: (){
-                    Get.to(()=>Recieptpreview());
+                    Get.to(()=>Recieptpreview(),arguments: args);
                   }),
                 ],
               ),

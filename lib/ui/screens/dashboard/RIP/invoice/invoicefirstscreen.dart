@@ -1,5 +1,8 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/getproposalcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/proposalcreationcontroller.dart';
 import 'package:ad_invoice_mobile/controllers/dropdowncontroller.dart';
 import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
+import 'package:ad_invoice_mobile/controllers/userscontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/emergency_invoice.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicesecondscreen.dart';
@@ -13,13 +16,13 @@ class Invoicefirstscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
   final Dropdowncontroller dropdowncontroller=Get.put(Dropdowncontroller());
+  final Userscontroller userscontroller=Get.find<Userscontroller>();
+  final TextEditingController searchcontroller=TextEditingController();
+  final Getproposalcontroller getproposalcontroller=Get.put(Getproposalcontroller());
+    
 
     final screenheight=MediaQuery.of(context).size.height;
     final screenwidth=MediaQuery.of(context).size.width;
-    final args=Get.arguments;
-    
-    List<Map<String,dynamic>> items=args['items'];
-    Map<String,dynamic> client=args['clients'];
     
     return Scaffold(
       appBar: AppBar(
@@ -40,6 +43,10 @@ class Invoicefirstscreen extends StatelessWidget {
                   child: SizedBox(
                     width: screenwidth/3*1.3,
                     child: TextFormField(
+                      controller: searchcontroller,
+                      onChanged: (value) => {
+                        userscontroller.filtering(value)
+                      },
                       
                       decoration: InputDecoration(
                         
@@ -64,107 +71,122 @@ class Invoicefirstscreen extends StatelessWidget {
             ),
           ),
            SizedBox(height: 15,),
-          Card(
-            elevation: 2,
-            margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Client Details",style: TextStyle(fontWeight: FontWeight.bold),),
-                  SizedBox(height: 8,),
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-            title: Text("${client['name']} | ${client['Location']}"),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 4,),
-                Text("Age:${client['age']}"),
-                Text('Bank:${client['bank']}'),
-              ],
-            ),
-          ),
-                ],
-              ),
-            ),
-          ),
-            SizedBox(height: 15,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 1,
-                child: TextFormField(
-                    decoration: InputDecoration(
-                      suffixIcon: Icon(Icons.search),
-                      label: Text("Search Proposal"),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      )
-                    ),
+          Expanded(
+            flex: 2,
+            child: Obx((){
+              final hassearch=searchcontroller.text.isNotEmpty;
+              final hasclient=userscontroller.filteredusers.isNotEmpty;
+              
+              if(!hassearch)
+              {
+                return Center(
+                  child: Column(
+                      children: [
+                        Text("Search Clients above",style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),)
+                      ],
                   ),
-              ),
-              SizedBox(width: 3,),
+                );
+              }
+              if(!hasclient)
+              {
+                return Center(
+                  child: Column(
+                    children: [
+                        Text("Sorry,no clients has been found on that name",style: TextStyle(
+                          color: Colors.red,fontWeight: FontWeight.bold
+                        ),),
+                    ],
+                  ),
+                );
+              }
+             return  ListView.builder(
+              itemCount: userscontroller.filteredusers.length,
+              itemBuilder: (context,index)
+            {
+              
+              final client=userscontroller.filteredusers[index];
+              final userid=client['id'];
+              return Card(
+              elevation: 2,
+              margin: EdgeInsets.symmetric(horizontal: 8,vertical: 4),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Client Details",style: TextStyle(fontWeight: FontWeight.bold),),
+                    SizedBox(height: 8,),
+                 Obx((){
+                  final isselected=userscontroller.selecteduser.value==index;
+                    return ListTile(
+                      shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                       onTap: ()async{
+                       try{
+             userscontroller.selection(index);
+          await Future.delayed(Duration(milliseconds: 50));
+          await getproposalcontroller.getprop(userid);
+   
+                       }
+                       catch(e)
+                       {
+                        Get.snackbar("Error in getting proposal", "$e");
+                       }
+                        
 
+                       },
+                      tileColor: isselected?Colors.blue[100]:Colors.white,
+                      trailing: isselected?Icon(Icons.check_rounded,color: Colors.green,):Icon(Icons.check_box_outline_blank),
+                      contentPadding: EdgeInsets.zero,
+             title: Text("${client['name']} | ${client['location']}"),
+             
+              
+            );
+                 })
+                  ],
+                ),
+              ),
+            );
+            });
+            }),
+          ),
               Obx(()=> Expanded(
                 flex: 1,
-                child: DropdownButtonFormField<String>(
-                    dropdownColor: Colors.grey[200],
-                    icon: Icon(Icons.arrow_drop_down),
-                    elevation: 6,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      )
-                    ),
-                    hint: Text("Select proposals",style: TextStyle(fontWeight: FontWeight.bold),),
-                    value:dropdowncontroller.selectedvalue.value ,
-                    onChanged: dropdowncontroller.changedvalue,
-                    items: <String>['Proposal 1', 'Proposal 2', 'Proposal 3', 'Proposal 4']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                        
-                      );
-                    }).toList(), 
-                    ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DropdownButtonFormField<String>(
+                      dropdownColor: Colors.grey[200],
+                      icon: Icon(Icons.arrow_drop_down),
+                      elevation: 6,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        )
+                      ),
+                      hint: Text("Select proposals",style: TextStyle(fontWeight: FontWeight.bold),),
+                      value:dropdowncontroller.selectedvalue.value ,
+                      onChanged: dropdowncontroller.changedvalue,
+                      items:getproposalcontroller.proposal.isEmpty 
+      ? [DropdownMenuItem(value: null, child: Text("No proposals available"))]
+      : getproposalcontroller.proposal.map<DropdownMenuItem<String>>((proposalItem) {
+          return DropdownMenuItem<String>(
+            value: proposalItem['id']?.toString(),
+            child: Text(
+              "${proposalItem['proposal_number']} - ${proposalItem['title']}",
+              style: TextStyle(fontSize: 14),
+            ),
+          );
+        }).toList(),
+                      ),
+                ),
               ),
 
               ),
-            ],
-          ),
-            SizedBox(height: 15,),
-        
-          Text("Products/Service list"),
-           
-          Expanded(
-            child: Column(
-              children: [
-                Container(
-                  height: screenheight*0.3,
-                  child: ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context,index)
-                  {
-                    final item=items[index];
-                    final isproduct=item['Category']=='Product';
-                    return Card(
-                        elevation: 3,
-                        child: ListTile(
-                          isThreeLine: true,
-                          title: Text(item['name']),
-                          subtitle:isproduct? Text("Price:${item['Price']} \n Quantity:${item['Qnty']}"):Text("Rate${item['Rate']}\nNo of workers${item['Workers']}"),
-                        ),
-                    );
-                  }),
-                ),
-              ],
-            ),
-          ),
+
+            SizedBox(height: 15,), 
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -172,9 +194,25 @@ class Invoicefirstscreen extends StatelessWidget {
               children: [
                 Custombutton(label: "Cancel", onpressed: (){}),
                 SizedBox(width: 15,),
-                Custombutton(label: "Next", onpressed: (){
-                  Get.to(Invoicesecondscreen(),arguments: Get.arguments);
-                })
+               Custombutton(label: "Next", onpressed: () async {
+              final selectedid = dropdowncontroller.selectedvalue.value;
+              
+              
+              try {
+                if (selectedid != null && selectedid.isNotEmpty) {
+                  final items = await getproposalcontroller.getpropitem(selectedid);
+                  final selectedindex = userscontroller.selecteduser.value;
+                  final selectedclient = userscontroller.filteredusers[selectedindex];
+                  
+                  Get.to(Invoicesecondscreen(), arguments: {
+                    'items': items,
+                    'clients': selectedclient,
+                  });
+                }
+              } catch (e) {
+                
+              }
+            })
               ],
             ),
           ),

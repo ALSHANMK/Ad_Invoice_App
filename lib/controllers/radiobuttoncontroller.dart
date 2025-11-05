@@ -12,11 +12,7 @@ RxList<Map<String, dynamic>> items = <Map<String, dynamic>>[].obs;
    @override
    void onInit(){
       super.onInit();
-      _initializeSampleData();
-      ever(items, (_){
-        print("Items changed");
-        filteredproduct.assignAll(items);
-      });
+      
       
       WidgetsBinding.instance.addPostFrameCallback((_) {
       filteredproduct.assignAll(items);

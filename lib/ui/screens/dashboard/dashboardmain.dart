@@ -1,5 +1,5 @@
 import 'package:ad_invoice_mobile/controllers/dashboardcontroller.dart';
-import 'package:ad_invoice_mobile/controllers/notificationcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/notificationandsupportcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/registerscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicefirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalfirstscreen.dart';
@@ -24,7 +24,7 @@ class Dashboardmain extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final Dashboardcontroller dashboardcontroller=Get.put(Dashboardcontroller());
-    final Notificationcontroller notificationcontroller=Get.put(Notificationcontroller());
+    final Notificationandsupportcontroller notificationcontroller=Get.put(Notificationandsupportcontroller());
 
     final List<Widget> _screens=[
       Homescreen(),
@@ -117,6 +117,7 @@ class Dashboardmain extends StatelessWidget {
                 //isMobile?SizedBox(width: 10,):SizedBox(width: 180,),
               IconButton(onPressed: (){
                 notificationcontroller.togglepanel();
+                notificationcontroller.getnoti();
               }, icon: Icon(Icons.notifications),alignment: Alignment.bottomRight,),
 
              

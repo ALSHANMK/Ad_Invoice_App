@@ -1,4 +1,4 @@
-import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
+
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,16 +11,10 @@ class ProductServiceedit extends StatelessWidget {
 
   final Map<String,dynamic>? product=Get.arguments;
 
-  //final Radiobuttoncontroller radiobuttoncontroller=Get.put(Radiobuttoncontroller());
+
 
   @override
   Widget build(BuildContext context) {
-
-
-    final rate=product!['Rate'];
-    final qnty=product!['Qnty'];
-    
-    print(qnty.runtimeType);
     final namecontroller=TextEditingController(text: product!['name']);
     final pricecontroller= TextEditingController(text: product!['Category']=='Product'?product!['Price'].toString():
     

@@ -10,6 +10,7 @@ class Proposalfirstscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     final Userscontroller userscontroller=Get.put(Userscontroller());
     
     final screenheight=MediaQuery.of(context).size.height;
@@ -23,7 +24,6 @@ class Proposalfirstscreen extends StatelessWidget {
         spacing: 10,
         children: [
           SizedBox(height: 10,),
-
           SizedBox(
               width: screenwidth/2*1.3,
               child: TextFormField(
@@ -39,17 +39,13 @@ class Proposalfirstscreen extends StatelessWidget {
                 },
               ),
             ),
-
-       
-
-          Container(
+         Container(
             height: screenheight/2,
             color: Colors.grey[300],
             child:Obx(()=>
             ListView.builder(itemCount: userscontroller.filteredusers.length,
               itemBuilder: (context,index)
-            {
-              
+            { 
               final client=userscontroller.filteredusers[index];
               return Card(
                   elevation: 6,
@@ -65,27 +61,23 @@ class Proposalfirstscreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("${client["age"]}"),
-                          Text(client["Company"]),
-                           Text(client["Location"]),
-                           Text(client['bank']),
-                           Text(client['Branch']),
-                            
+                        Text(client['industry']),
+                        Text(client['email']),
+                        Text(client['phone']),
+                        Text(client['address']),
+                        Text(client['Location']),
                       ],
                     ),
                     trailing: isselected?IconButton(onPressed: (){}, icon: Icon(Icons.check_box_rounded,color: Colors.green,)):
                     Icon(Icons.check_box_outline_blank),
                   );
-                  }) 
-                  
+                  })                  
               );
             }),
             ), 
           ),
-
           SizedBox(height: 20,),
-
-          Row(
+           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(width: 10,),
@@ -104,9 +96,7 @@ class Proposalfirstscreen extends StatelessWidget {
               })
             ],
           ),
-          
         ],
-          
         ),
 
     );

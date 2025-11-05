@@ -7,6 +7,7 @@ class Receiptthirdscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenheight=MediaQuery.of(context).size.height;
+    
 
     return Scaffold(
       appBar: AppBar(title: Text("Receipt preview"),

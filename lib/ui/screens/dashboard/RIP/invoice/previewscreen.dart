@@ -1,8 +1,9 @@
 
+import 'package:ad_invoice_mobile/controllers/apicontrollers/proposalcreationcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicethirdscreen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
 class Previewscreen extends StatelessWidget {
@@ -11,11 +12,14 @@ class Previewscreen extends StatelessWidget {
    Previewscreen({super.key,
    this.printbutton=true,
    });
+   
 
   @override
   Widget build(BuildContext context) {
+    
 
     final args=Get.arguments;
+    final Proposalcreationcontroller proposalcreationcontroller=Get.find<Proposalcreationcontroller>();
 
       Widget _buildinvoiceRow(String label,String value)
       {
@@ -33,28 +37,22 @@ class Previewscreen extends StatelessWidget {
     final screenwidth=MediaQuery.of(context).size.width;
     final List<Map<String,dynamic>> items=args['items'];
     final Map<String,dynamic> client=args['client'];
+    
+    
 
     final allitems=items.map((item){
-      final isproduct=item['Category']=='Product';
       return{
         'name':item['name'],
-        'Qnty/Workers':isproduct?item['Qnty']:item['Workers'],
-        'Price/Rate':isproduct?item['Price']:item['Rate'],
-        'Category':item['Category'],
+        'Qnty/Workers':item['quantity'],
+        'Price/Rate':item['price'],
+        'Category':item['item_type'],
       };
     }).toList();
-
-    final totalbill=items.fold(0.0, (sum,item)
-    {
-      final isproduct=item['Category']=='Product';
-      final qnty_item=isproduct?(item['Qnty']??0):(item['Workers']);
-      final price_rate=isproduct?(item['Price']??0):(item['Rate']);
-      final totalrate=qnty_item*price_rate;
-      return sum+totalrate;
-    });
-
-    final gst=(totalbill/16).ceil();
-    final grandtotal=totalbill+gst;
+   
+    double totalBill = 0.0;
+for (var item in items) {
+  totalBill += double.parse(item['total'].toString());
+}
 
     final Map<int,Color> templatefontcolors={
       1:Colors.white,
@@ -159,11 +157,7 @@ class Previewscreen extends StatelessWidget {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("${client['name']}",style: TextStyle(fontSize: 8),),
-                                          
-                                          Text("${client['Location']}",style: TextStyle(fontSize: 8),),
-                                          
-                                          Text("${client['Company']}",style: TextStyle(fontSize: 8),),
+                                         
                                           
                                         ],
                                       ),
@@ -256,9 +250,7 @@ class Previewscreen extends StatelessWidget {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                      children: [
-                                       Text("${client['name']}\n${client['bank']}",
-                                            style:  TextStyle(fontSize: 10,color: Colors.black,decoration: TextDecoration.none,)),
-                                            Text("${client['Location']}",style: TextStyle(fontSize: 12),),
+                                      
                                      ],
                                    ),
                                 ),
@@ -269,11 +261,11 @@ class Previewscreen extends StatelessWidget {
                                    crossAxisAlignment: CrossAxisAlignment.end,
                                                                    
                                      children: [
-                                       Text("Total item Bill = ₹$totalbill",
+                                       Text("Total item Bill =$totalBill ",
                                             style:  TextStyle(fontSize: 10,color: Colors.black,decoration: TextDecoration.none,)),
-                                            Text("GST=$gst",style: TextStyle(fontSize: 10,color: Colors.black,decoration: TextDecoration.none),),
+                                            Text("GST=",style: TextStyle(fontSize: 10,color: Colors.black,decoration: TextDecoration.none),),
                                            
-                                            Text("Grand Total=$grandtotal",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
+                                            Text("Grand Total=",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
                                      ],
                                    ),
                                  ),
@@ -295,8 +287,17 @@ class Previewscreen extends StatelessWidget {
                       children: [
                         Custombutton(label: "Back", onpressed: Get.back),
                         SizedBox(width: 5,),
-                        Custombutton(label: "Preview", onpressed: (){
-                                        Get.to(Invoicethirdscreen(),arguments:Get.arguments);
+                        Custombutton(label: "Print", onpressed: ()async{
+                                        
+                                        await proposalcreationcontroller.createinvoice(client, items);
+                                        if(proposalcreationcontroller.issucessinvo.value)
+                                        {
+                                          Get.snackbar("Success", "Invoice created",backgroundColor: Colors.green[200]);
+                                          Get.to(Invoicethirdscreen(),arguments:Get.arguments);
+                                        }
+                                        else{
+                                           Get.snackbar("Error", "Couldnt make invoice",backgroundColor: Colors.red[200]);
+                                        }
                                       }),
                       ],
                     )

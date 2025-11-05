@@ -23,6 +23,7 @@ late List<Map<String,dynamic>> items;
       super.initState();
       final args=Get.arguments;
       items=List<Map<String,dynamic>>.from(args['items']??[]);
+      print("items are $items");
       client=Map<String,dynamic>.from(args['clients']);
     }
   final Radiobuttoncontroller radiobuttoncontroller=Get.find<Radiobuttoncontroller>();
@@ -79,6 +80,7 @@ late List<Map<String,dynamic>> items;
       
       Column(
         children: [
+          Center(child: Text("Hold item to delete!",style: TextStyle(fontSize: 12,color: Colors.red),)),
              Expanded(
                child: SingleChildScrollView(
                 padding: EdgeInsets.all(16),
@@ -189,7 +191,7 @@ late List<Map<String,dynamic>> items;
               Get.back();
             }),
       
-        ],
+       ],
       ),
       
     );

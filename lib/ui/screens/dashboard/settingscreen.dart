@@ -1,26 +1,37 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dart';
+import 'package:ad_invoice_mobile/controllers/dashboardcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/launchscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/generalscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/supportscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/transactionscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/usermanagement/usermanagementmainscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 
 class Settingscreen extends StatelessWidget {
-  const Settingscreen({super.key});
+   Settingscreen({super.key});
+
+  final Logincontroller logincontroller=Get.find<Logincontroller>();
+  final Dashboardcontroller dashboardcontroller=Get.find<Dashboardcontroller>();
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
          SizedBox(height: 10,),
-        Card(
+         SizedBox(height: 10,),
+         Card(
           elevation: 6,
           child: ListTile(
         onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Generalscreen()));
+          Get.to(()=>Usermanagementmainscreen());
         },
-        leading: Icon(Icons.settings),
-        title: Text("General"),
+        leading: Icon(Icons.manage_accounts_outlined,color: Colors.blue,),
+        title: Text("User Management",style: TextStyle(fontWeight: FontWeight.bold),),
         trailing: Icon(Icons.arrow_forward_ios_outlined),
+
       ),
         ),
         SizedBox(height: 10,),
@@ -28,30 +39,10 @@ class Settingscreen extends StatelessWidget {
           elevation: 6,
           child: ListTile(
         onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Transactionscreen()));
+          Get.to(()=>Supportscreen());
         },
-        leading: Icon(Icons.currency_rupee_sharp),
-        title: Text("Transactions"),
-        trailing: Icon(Icons.arrow_forward_ios_outlined),
-      ),
-        ),
-         SizedBox(height: 10,),
-        Card(
-          elevation: 6,
-          child: ListTile(
-        onTap: (){},
-        leading: Icon(Icons.print),
-        title: Text("Invoice print"),
-        trailing: Icon(Icons.arrow_forward_ios_outlined),
-      ),
-        ),
-         SizedBox(height: 10,),
-        Card(
-          elevation: 6,
-          child: ListTile(
-        onTap: (){},
-        leading: Icon(Icons.browse_gallery_rounded),
-        title: Text("Reminders"),
+        leading: Icon(Icons.support,color: Colors.red,),
+        title: Text("Support",style: TextStyle(fontWeight: FontWeight.bold),),
         trailing: Icon(Icons.arrow_forward_ios_outlined),
       ),
         ),
@@ -67,10 +58,14 @@ class Settingscreen extends StatelessWidget {
           actions: [
             Custombutton(label: "Cancel", onpressed: (){
               Navigator.pop(ctx);
+
             }),
             SizedBox(width: 5,),
             Custombutton(label: "Logout", onpressed:(){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>Launchscreen()));
+              logincontroller.accesstoken.value='';
+              logincontroller.clearfield();
+              dashboardcontroller.selectedindex.value=0;
             })
           ],
          ));

@@ -30,7 +30,7 @@ class Proposalthirdscreen extends StatelessWidget {
           Container(
             alignment: Alignment.center,
               height: screenheight*0.8,
-              width: screenwidth*0.8,
+              constraints: BoxConstraints(maxWidth: screenwidth*0.8),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black,width: 3),
                   borderRadius: BorderRadius.circular(8)

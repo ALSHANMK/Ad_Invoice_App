@@ -1,4 +1,4 @@
-import 'package:ad_invoice_mobile/controllers/notificationcontroller.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/notificationandsupportcontroller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/instance_manager.dart';
@@ -7,7 +7,7 @@ import 'package:get/state_manager.dart';
 class Notificaionpanel extends StatelessWidget {
    Notificaionpanel({super.key});
 
-final Notificationcontroller notificationcontroller=Get.find();
+final Notificationandsupportcontroller notificationcontroller=Get.find();
   @override
   Widget build(BuildContext context) {
     return Obx(()=>

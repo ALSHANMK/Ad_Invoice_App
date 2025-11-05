@@ -1,20 +1,17 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/listclientcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/addnewclientscreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/clientfulldetails.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/get_core.dart';
 
 class Clientscreen extends StatelessWidget {
   Clientscreen({super.key});
 
-  
+ 
 
-  final List<Map<String, String>> clients = [
-    {"name": "Client 1", "email": "Company 1", "phone": "Kozhikode"},
-    {"name": "Client 2", "email": "Company 2", "phone": "Thrissur"},
-    {"name": "Client 3", "email": "Company 3", "phone": "Kochi"},
-    {"name": "Client 4", "email": "Company 4", "phone": "Kozhikode"},
-    {"name": "Client 5", "email": "Company 5", "phone": "Kollam"},
-    {"name": "Client 6", "email": "Company 6", "phone": "Idukki"},
-  ];
+  final Listclientcontroller listclientcontroller=Get.put(Listclientcontroller());
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +22,19 @@ class Clientscreen extends StatelessWidget {
         Container(
           height: screenheight/2*1.3,
           child: ListView.builder(
-            itemCount: clients.length,
+            itemCount: listclientcontroller.sortedclients.length,
             itemBuilder: (context, index) {
-              final client = clients[index];
+              final client = listclientcontroller.sortedclients[index];
               return Card(
                 elevation: 3,
                 margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 child: ListTile(
                   leading: CircleAvatar(
+                    
                     foregroundColor: Colors.white,
-                    backgroundColor: const Color.fromARGB(255, 226, 62, 62),
-                    child: Text(client["name"]![0]),
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person_2_outlined),
                     
                     
                   ),
@@ -51,7 +49,7 @@ class Clientscreen extends StatelessWidget {
                   }, icon: Icon(Icons.edit)),
                   
                   onTap: () {
-                    print("Tapped ${client["name"]}");
+                   Get.to(()=>Clientfulldetails(),arguments: client);
                   },
                 ),
               );

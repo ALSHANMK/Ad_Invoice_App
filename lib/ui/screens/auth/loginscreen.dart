@@ -1,3 +1,4 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/forgotscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/registerscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
@@ -5,19 +6,22 @@ import 'package:ad_invoice_mobile/ui/screens/auth/widgets/customforfield.dart';
 
 import 'package:ad_invoice_mobile/ui/screens/dashboard/dashboardmain.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_framework.dart';
+import 'package:get/get.dart';
+import 'package:responsive_framework/responsive_framework.dart' as responsive;
 
 class Loginscreen extends StatelessWidget {
   const Loginscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final bool isMobile = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
+
+    final Logincontroller logincontroller=Get.put(Logincontroller());
+    final bool isMobile = responsive.ResponsiveBreakpoints.of(context).smallerThan(responsive.TABLET);
 
     Widget loginForm = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        /// Logo
+       
         Image.asset(
           'assets/logo.png',
           width: isMobile ? 120 : 180,
@@ -27,7 +31,7 @@ class Loginscreen extends StatelessWidget {
 
         const SizedBox(height: 10),
 
-        /// Welcome Text
+        
         Text(
           "Welcome back business partner",
           style: TextStyle(
@@ -40,7 +44,7 @@ class Loginscreen extends StatelessWidget {
 
         const SizedBox(height: 30),
 
-        /// Login Title
+       
         Text(
           "Login",
           style: TextStyle(
@@ -52,32 +56,52 @@ class Loginscreen extends StatelessWidget {
 
         const SizedBox(height: 20),
 
-        /// Username field
-        const Customforfield(
-          hinttext: "Username",
-          prefixicon: Icons.supervised_user_circle,
+      
+        TextField(
+          controller: logincontroller.usernamecontroller,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "Username",
+            border: OutlineInputBorder(
+              
+              borderRadius: BorderRadius.circular(20)
+            )
+          ),
         ),
 
         const SizedBox(height: 20),
 
-        /// Password field
-        const Customforfield(
-          hinttext: "Password",
-          prefixicon: Icons.lock,
+      
+        TextField(
+          controller: logincontroller.passwordcontroller,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "password",
+            border: OutlineInputBorder(
+              
+              borderRadius: BorderRadius.circular(20)
+            )
+          ),
         ),
 
         const SizedBox(height: 40),
 
-        /// Signin button
-        Custombutton(label: "Signin", onpressed: (){
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("Signed IN!")),
-            );
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboardmain()));
+        
+        Custombutton(label: "Signin", onpressed: ()async{
+          
+            await logincontroller.login();
+          if(logincontroller.accesstoken.value.isNotEmpty)
+          {
+             Get.to(()=>Dashboardmain());
+          }
+  
         }),
+        Obx(()=>logincontroller.isloading.value?CircularProgressIndicator():SizedBox.shrink()),
         const SizedBox(height: 15),
 
-        /// Forgot password link
+        
         InkWell(
           onTap: () {
             Navigator.push(
@@ -96,12 +120,12 @@ class Loginscreen extends StatelessWidget {
 
         const SizedBox(height: 10),
 
-        /// Register link
+        
         InkWell(
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const Registerscreen()),
+              MaterialPageRoute(builder: (context) => Registerscreen()),
             );
           },
           child: const Text(
@@ -125,15 +149,17 @@ class Loginscreen extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          /// Background image
+       
           Positioned.fill(
             child: Image.asset(
               "assets/background.jpeg",
               fit: BoxFit.fill,
+              color: Colors.black.withOpacity(0.5),
+              colorBlendMode: BlendMode.darken,
             ),
           ),
 
-          /// Login Form (Mobile vs Tablet)
+        
           Align(
             alignment: const Alignment(0, -0.7),
             child: SingleChildScrollView(
@@ -150,12 +176,12 @@ class Loginscreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(30),
                           child: SizedBox(
-                            width: ResponsiveValue<double>(
+                            width: responsive.ResponsiveValue<double>(
                               context,
                               defaultValue: MediaQuery.of(context).size.width * 0.8,
                               conditionalValues: [
-                                Condition.smallerThan(name: TABLET, value: MediaQuery.of(context).size.width * 0.9),
-                                Condition.largerThan(name: DESKTOP, value: 600),
+                                responsive.Condition.smallerThan(name: responsive.TABLET, value: MediaQuery.of(context).size.width * 0.9),
+                                responsive.Condition.largerThan(name: responsive.DESKTOP, value: 600),
                               ],
                             ).value,
                             child: loginForm,
@@ -168,7 +194,7 @@ class Loginscreen extends StatelessWidget {
         ],
       ),
 
-      /// Footer
+      
       bottomNavigationBar: Container(
         height: 70,
         color: Colors.transparent,

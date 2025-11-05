@@ -1,3 +1,4 @@
+import 'package:ad_invoice_mobile/controllers/proposalsecondscreencontroller.dart';
 import 'package:ad_invoice_mobile/controllers/productcontroller.dart';
 import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
@@ -15,7 +16,7 @@ class Proposalsecondscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Radiobuttoncontroller radiobuttoncontroller=Get.put(Radiobuttoncontroller());
+    final Proposalsecondscreencontroller proposalsecondscreencontroller=Get.put(Proposalsecondscreencontroller());
    
     Map<String,dynamic> user=Get.arguments;
     final screenheight=MediaQuery.of(context).size.height;
@@ -37,7 +38,7 @@ class Proposalsecondscreen extends StatelessWidget {
             width: screenwidth/2*1.2,
             child: TextFormField(
               onChanged: (value){
-                radiobuttoncontroller.filtering(value);
+                proposalsecondscreencontroller.filtering(value);
               },
                   decoration: InputDecoration(
                     hintText: "Search product/service",
@@ -55,21 +56,21 @@ class Proposalsecondscreen extends StatelessWidget {
 
                 height: screenheight/2*1.2,
                 color: Colors.grey[300],
-                child: Obx(()=>ListView.builder(itemCount: radiobuttoncontroller.items.length,
+                child: Obx(()=>ListView.builder(itemCount: proposalsecondscreencontroller.items.length,
                 itemBuilder: (context,index)
                 {
-                   final product=radiobuttoncontroller.items[index];
+                   final product=proposalsecondscreencontroller.items[index];
                   return Card(
                      elevation: 2,
                      margin: EdgeInsets.symmetric(vertical: 15,horizontal: 10),
                      child:Obx((){
 
-                      final isselected=radiobuttoncontroller.selecteditemindex.contains(index);
+                      final isselected=proposalsecondscreencontroller.selecteditemindex.contains(index);
                       return ListTile(
                         shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        onTap: ()=>radiobuttoncontroller.selections(index),
+                        onTap: ()=>proposalsecondscreencontroller.selections(index),
                         tileColor: isselected?Colors.green[200]:Colors.grey[200],
                       isThreeLine: true,
                       title: Text(product['name'],style: TextStyle(fontWeight: FontWeight.bold),),
@@ -77,17 +78,19 @@ class Proposalsecondscreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if(product['Category']=='Product')
+                          if(product['type']=='product')
                           ...[
-                            Text("Price:${product["Price"]}"),
-                          Text("Quantity:${product["Qnty"]}"),
-                          Text("Category:${product["Category"]}",style: TextStyle(fontWeight: FontWeight.bold),),
+                              
+                              Text(product['price']),
+                              Text(product['description']),
+                              Text(product['type']),
                           ]
-                          else if(product['Category']=='Service')
+                          else if(product['type']=='service')
                           ...[
-                            Text("Rate per hour:${product["Rate"]}"),
-                          Text("Workers:${product["Workers"]}"),
-                          Text("Category:${product["Category"]}",style: TextStyle(fontWeight: FontWeight.bold),),
+                       
+                              Text(product['price']),
+                              Text(product['description']),
+                              Text(product['type'],style: TextStyle(fontWeight: FontWeight.bold),),
                           ]
                           
                         ],
@@ -101,7 +104,7 @@ class Proposalsecondscreen extends StatelessWidget {
                               
                             if(updated!=null)
                             {
-                                radiobuttoncontroller.updated(product, updated);
+                                proposalsecondscreencontroller.updated(product, updated);
                             }
                             
                           }, icon: Icon(Icons.edit,color: Colors.blue,),),
@@ -125,13 +128,15 @@ class Proposalsecondscreen extends StatelessWidget {
             children: [
               Custombutton(label: "Clear", onpressed: (){}),
               SizedBox(width: 20,),
-              Custombutton(label: "Next", onpressed: (){
+              Custombutton(label: "Save", onpressed: (){
 
-                var selecteditems=radiobuttoncontroller.selecteditemindex.map((i)=>radiobuttoncontroller.items[i]).toList();
+                var selecteditems=proposalsecondscreencontroller.selecteditemindex.map((i)=>proposalsecondscreencontroller.items[i]).toList();
                 Get.to(()=>Proposalpreviewscreen(),arguments: {
                   'items':selecteditems,
                   'clients':user,
                 });
+                
+                
               }),
             ],
           ),

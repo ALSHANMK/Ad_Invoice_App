@@ -1,7 +1,11 @@
+import 'package:ad_invoice_mobile/controllers/apicontrollers/productlistcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/addnewproductscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/addnewservicescreen.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/product_servicefulldetails.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 
 class Itemscreen extends StatelessWidget {
   const Itemscreen({super.key});
@@ -9,14 +13,14 @@ class Itemscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final screenheight=MediaQuery.of(context).size.height;
+    final Productlistcontroller productlistcontroller=Get.put(Productlistcontroller());
 
-    final List<String> products=["Soap","Shampoo","Conditioner"];
-    final List<String> services=["Plumbing","Carpentary","Painting"];
+    final screenheight=MediaQuery.of(context).size.height;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           bottom: TabBar(labelColor: Colors.blue,
             unselectedLabelColor: Colors.grey
           ,tabs:[
@@ -29,23 +33,27 @@ class Itemscreen extends StatelessWidget {
             children: [
               SizedBox(
                 height: screenheight/2*1.2,
-                child: ListView.builder(
-                  itemCount: products.length,
+                child: Obx(()=>ListView.builder(
+                  itemCount: productlistcontroller.products.where((item)=>item['type']=='product').length,
                   itemBuilder: (context,index)
                 {
+                  final product=productlistcontroller.products.where((item)=>item['type']=='product').toList()[index];
                   return Card(
                     margin: EdgeInsets.all(10),
                     child: ListTile(
+                      onTap: () {
+                        Get.to(()=>ProductServicefulldetails(),arguments: product);
+                      },
                       leading: Icon(Icons.shopping_bag),
-                      title: Text(products[index]),
+                      title: Text(product['name']),
                     ),
                   );
-                }),
+                }),)
               ),
               SizedBox(
                   width: 200,
                   child: Custombutton(label: "Add new product", onpressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Addnewproductscreen()));
+                    Get.to(()=>Addnewproductscreen());
                   }),
                 ),
             ],
@@ -56,19 +64,23 @@ class Itemscreen extends StatelessWidget {
             children: [
               SizedBox(
                 height: screenheight/2*1.2,
-                child: ListView.builder(
+                child: Obx(()=>ListView.builder(
                   
-                  itemCount: services.length,
+                  itemCount: productlistcontroller.products.where((item)=>item['type']=='service').length,
                   itemBuilder: (context,index)
                 {
+                  final service=productlistcontroller.products.where((item)=>item['type']=='service').toList()[index];
                   return Card(
                     margin: EdgeInsets.all(20),
                     child: ListTile(
+                      onTap: () {
+                        Get.to(()=>ProductServicefulldetails(),arguments: service);
+                      },
                       leading: Icon(Icons.home_repair_service),
-                      title: Text(services[index]),
+                      title: Text(service['name']),
                     ),
                   );
-                }),
+                }),)
               ),
                SizedBox(
                   width: 200,
