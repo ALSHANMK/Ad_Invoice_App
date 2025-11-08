@@ -1,7 +1,5 @@
 import 'package:ad_invoice_mobile/controllers/apicontrollers/productlistcontroller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 class Proposalsecondscreencontroller extends GetxController{
 

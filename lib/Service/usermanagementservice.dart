@@ -1,6 +1,5 @@
 import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 
 class Usermanagementservice extends GetConnect{
 
@@ -35,16 +34,25 @@ class Usermanagementservice extends GetConnect{
   Future<dynamic> deleteuser(int userid)async{
  
     final response=await delete("users/user/$userid/delete/",headers: {
-      'Authorization':'Bearer ${logincontroller.accesstoken.value}'
+      'Authorization':'Bearer ${logincontroller.accesstoken.value}',
+      
     }, 
+    
+   
     );
     return response.body;
+    
   }
 
 
-  Future<dynamic> updateuser(Map<String,dynamic> body)async{
+  Future<dynamic> updateuser(Map<String,dynamic> body,int userid)async{
 
-    final response=await put("users/user/update/<int:user_id>/", body,headers: {
+    final payload={
+      ...body,
+      "tenant":logincontroller.tenantid.value,
+    };
+
+    final response=await put("users/user/update/$userid/", payload,headers: {
       'Authorization':'Bearer ${logincontroller.accesstoken.value}'
     });
     return response.body;

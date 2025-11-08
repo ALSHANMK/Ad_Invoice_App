@@ -106,7 +106,7 @@ class Launchscreen extends StatelessWidget {
                           ),
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                  ),
                     //Center(child: Text("we welcomes you",style: TextStyle(color: Colors.white),),),

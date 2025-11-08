@@ -9,7 +9,7 @@ import 'package:get/route_manager.dart';
 class Previewscreen extends StatelessWidget {
 
   final bool printbutton;
-   Previewscreen({super.key,
+   const Previewscreen({super.key,
    this.printbutton=true,
    });
    
@@ -21,12 +21,12 @@ class Previewscreen extends StatelessWidget {
     final args=Get.arguments;
     final Proposalcreationcontroller proposalcreationcontroller=Get.find<Proposalcreationcontroller>();
 
-      Widget _buildinvoiceRow(String label,String value)
+      Widget buildinvoiceRow(String label,String value)
       {
         return Row(
           children: [
-            Text("$label",style: TextStyle(fontSize: 8),),
-            Text("$value",style: TextStyle(fontSize: 8),),
+            Text(label,style: TextStyle(fontSize: 8),),
+            Text(value,style: TextStyle(fontSize: 8),),
           ],
         );
       }
@@ -167,11 +167,11 @@ for (var item in items) {
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                            _buildinvoiceRow('Invoice #:', '3211'),
-                                            _buildinvoiceRow('Date:', '21-01-2025'),
-                                            _buildinvoiceRow('P.O. #:', '123'),
-                                            _buildinvoiceRow('Due Date:', '23-02-2025'),
-                                            _buildinvoiceRow('Terms:', 'Net 30'),
+                                            buildinvoiceRow('Invoice #:', '3211'),
+                                            buildinvoiceRow('Date:', '21-01-2025'),
+                                            buildinvoiceRow('P.O. #:', '123'),
+                                            buildinvoiceRow('Due Date:', '23-02-2025'),
+                                            buildinvoiceRow('Terms:', 'Net 30'),
                                         ],
                                       ),
                                     )

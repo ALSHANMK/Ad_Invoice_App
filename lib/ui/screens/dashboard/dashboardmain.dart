@@ -1,3 +1,4 @@
+import 'package:ad_invoice_mobile/Service/permissionservice.dart';
 import 'package:ad_invoice_mobile/controllers/dashboardcontroller.dart';
 import 'package:ad_invoice_mobile/controllers/apicontrollers/notificationandsupportcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/registerscreen.dart';
@@ -5,7 +6,6 @@ import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicefirsts
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/propsals/proposalfirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/receipt/receiptfirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/clientscreen.dart';
-
 import 'package:ad_invoice_mobile/ui/screens/dashboard/homescreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/profilescreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/reportscreen.dart';
@@ -18,182 +18,194 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Dashboardmain extends StatelessWidget {
-  const Dashboardmain({super.key});
+  Dashboardmain({super.key});
+  final permissionService = Get.find<PermissionService>();
+      final Dashboardcontroller dashboardcontroller = Get.put(Dashboardcontroller());
+    final Notificationandsupportcontroller notificationcontroller = Get.put(Notificationandsupportcontroller());
 
   @override
   Widget build(BuildContext context) {
 
-    final Dashboardcontroller dashboardcontroller=Get.put(Dashboardcontroller());
-    final Notificationandsupportcontroller notificationcontroller=Get.put(Notificationandsupportcontroller());
 
-    final List<Widget> _screens=[
+    final List<Widget> screens = [
       Homescreen(),
       Clientscreen(),
       Itemscreen(),
       Settingscreen(),
-      
     ];
 
-
-    final bool isMobile=ResponsiveBreakpoints.of(context).smallerThan(TABLET);
+    final bool isMobile = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
+    
     return Scaffold(
-        appBar: PreferredSize(preferredSize:isMobile? const Size.fromHeight(50):const Size.fromHeight(80), 
-        
-       
-         
-          child: SafeArea(child: Row(
-            
-            children: [
-             PopupMenuButton<String>(icon: Icon(Icons.menu),
-             
-             borderRadius: BorderRadius.circular(20),
-             requestFocus: true,
-             elevation: 4,
-             constraints: BoxConstraints(minHeight: double.infinity/2,minWidth: 25),
-             iconColor: Colors.blue,
-             shadowColor: Colors.black,
-             surfaceTintColor: const Color.fromARGB(255, 92, 1, 1),
-             
-             itemBuilder: (context) => <PopupMenuEntry<String>>[
-
-              PopupMenuItem<String>(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Profilescreen()));
-                },
-                padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                value: "profile",
-                child: Text("Profile",style: TextStyle(fontWeight: FontWeight.bold),),
-               ),
-                PopupMenuItem<String>(
-                  
-                  padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                value: "Invoices",
-                child: Text("Invoices",style: TextStyle(fontWeight: FontWeight.bold),),
-               ),
-                PopupMenuItem<String>(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Clientscreen()));
-                  },
-                 padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                value: "Clients",
-                child: Text("Clients",style: TextStyle(fontWeight: FontWeight.bold),),
-               ),
-               PopupMenuItem<String>(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Reportscreen()));
-                },
-                padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                value: "report",
-                child: Text("Reports",style: TextStyle(fontWeight: FontWeight.bold),),
-               ),
-               PopupMenuItem<String>(
-                padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                value: "items",
-                child: Text("Items",style: TextStyle(fontWeight: FontWeight.bold),),
-               ),
-               PopupMenuItem<String>(
-                padding: EdgeInsets.fromLTRB(15, 10, 0, 0),
-                value: "more",
-                child: Text("More",style: TextStyle(fontWeight: FontWeight.bold),),
-               ),
-             ]
-             ),
-              SizedBox(width: 10,),
-
-                SizedBox(
-                  width: isMobile?210:380,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      hintText: "Search clients",
-                      suffixIcon: Icon(Icons.search),
-                      
-                    ),
-                  ),
-                ),
-                const Spacer(),
-                //isMobile?SizedBox(width: 10,):SizedBox(width: 180,),
-              IconButton(onPressed: (){
-                notificationcontroller.togglepanel();
-                notificationcontroller.getnoti();
-              }, icon: Icon(Icons.notifications),alignment: Alignment.bottomRight,),
-
-             
-              //isMobile?SizedBox(width: 5,):SizedBox(width: 10,),
-              IconButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>Profilescreen()));
-              }, icon: Icon(Icons.person),alignment: Alignment.bottomRight,)
-            ],
-          )),
-
-
-        ),
-        body: Stack(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Row(
           children: [
-            Obx(()=>_screens[dashboardcontroller.selectedindex.value]),
-            Notificaionpanel(),
+            // Profile icon on the left
+            IconButton(
+              onPressed: () {
+                Get.to(() => Profilescreen());
+              },
+              icon: Icon(Icons.person_outline),
+              tooltip: "Profile",
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: "Search...",
+                  border: InputBorder.none,
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  suffixIcon: Icon(Icons.search, color: Colors.grey[600]),
+                ),
+              ),
+            ),
           ],
         ),
-       
+        backgroundColor: Colors.white,
+        elevation: 1,
+        actions: [
+          IconButton(
+            onPressed: () {
+              notificationcontroller.togglepanel();
+              notificationcontroller.getnoti();
+            },
+            icon: Icon(Icons.notifications_outlined),
+            tooltip: "Notifications",
+          ),
+          PopupMenuButton<String>(
+            icon: Icon(Icons.more_vert),
+            onSelected: (value) {
+              _handleMenuSelection(value, context);
+            },
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: "invoices",
+                child: ListTile(
+                  leading: Icon(Icons.description, size: 20),
+                  title: Text("Invoices", style: TextStyle(fontSize: 14)),
+                ),
+              ),
+              PopupMenuItem(
+                value: "clients",
+                child: ListTile(
+                  leading: Icon(Icons.people, size: 20),
+                  title: Text("Clients", style: TextStyle(fontSize: 14)),
+                ),
+              ),
+              PopupMenuItem(
+                value: "reports",
+                child: ListTile(
+                  leading: Icon(Icons.analytics, size: 20),
+                  title: Text("Reports", style: TextStyle(fontSize: 14)),
+                ),
+              ),
+              PopupMenuItem(
+                value: "items",
+                child: ListTile(
+                  leading: Icon(Icons.inventory_2, size: 20),
+                  title: Text("Items", style: TextStyle(fontSize: 14)),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      
+      body: Stack(
+        children: [
+          Obx(() => screens[dashboardcontroller.selectedindex.value]),
+          Notificaionpanel(),
+        ],
+      ),
 
-        bottomNavigationBar: Obx(()=>BottomNavigationBar(
+      bottomNavigationBar: Obx(() => Container(
+        decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: Colors.grey[200]!)),
+        ),
+        child: BottomNavigationBar(
           currentIndex: dashboardcontroller.selectedindex.value,
           onTap: dashboardcontroller.changetab,
-          selectedItemColor: Colors.blue,
-          unselectedItemColor: Colors.grey,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.blue[700],
+          unselectedItemColor: Colors.grey[600],
+          selectedLabelStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+          unselectedLabelStyle: TextStyle(fontSize: 12),
           items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home),
+              label: "Home",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.people_outline),
+              activeIcon: Icon(Icons.people),
+              label: "Clients",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.inventory_2_outlined),
+              activeIcon: Icon(Icons.inventory_2),
+              label: "Items",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings_outlined),
+              activeIcon: Icon(Icons.settings),
+              label: "Settings",
+            ),
+          ],
+        ),
+      )),
 
-            BottomNavigationBarItem(icon: Icon(Icons.home,color: Colors.blue,),label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.attach_money,color: Colors.blue,),label: "Clients"),
-            BottomNavigationBarItem(icon: Icon(Icons.shopping_cart_checkout_sharp ,color: Colors.blue,),label: "Items"),
-            BottomNavigationBarItem(icon: Icon(Icons.settings,color: Colors.blue,),label: "Settings"),
-          ])
-   ),
-   floatingActionButton: SpeedDial(
-    backgroundColor: Colors.transparent,
-    activeBackgroundColor: Colors.blue,
-    elevation: 0,
-    overlayOpacity: 0.8,
-    overlayColor: Colors.black,
-    buttonSize: Size(40, 50),
-    foregroundColor: Colors.black,
-    icon: Icons.add,
-    activeIcon: Icons.close,
-    children: [
-      SpeedDialChild(
-        
-        backgroundColor: Colors.blue,
-        label: "Receipts",
-        onTap: (){
-          Get.to(()=>Receiptfirstscreen());
-        },
-        child: Icon(Icons.payment),
-        labelStyle: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)
+      floatingActionButton: SpeedDial(
+        backgroundColor: Colors.blue[700],
+        foregroundColor: Colors.white,
+        overlayColor: Colors.black54,
+        buttonSize: Size(56, 56),
+        icon: Icons.add,
+        activeIcon: Icons.close,
+        children: [
+          SpeedDialChild(
+            backgroundColor: Colors.blue[600],
+            foregroundColor: Colors.white,
+            label: "New Invoice",
+            onTap: () => Get.to(() => Invoicefirstscreen()),
+            child: Icon(Icons.description, size: 20),
+          ),
+          SpeedDialChild(
+            backgroundColor: Colors.blue[600],
+            foregroundColor: Colors.white,
+            label: "New Proposal",
+            onTap: () => Get.to(() => Proposalfirstscreen()),
+            child: Icon(Icons.receipt, size: 20),
+          ),
+          SpeedDialChild(
+            backgroundColor: Colors.blue[600],
+            foregroundColor: Colors.white,
+            label: "New Receipt",
+            onTap: () => Get.to(() => Receiptfirstscreen()),
+            child: Icon(Icons.payment, size: 20),
+          ),
+        ],
       ),
-      SpeedDialChild(
-        backgroundColor: Colors.blue,
-        child: Icon(Icons.receipt),
-        label: "New Proposal",
-        onTap: (){
-          Get.to(Proposalfirstscreen());
-        },
-        labelStyle: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)
-        
-      ),
-      SpeedDialChild(
-        backgroundColor: Colors.blue,
-        label: "New Invoice",
-        onTap: (){
-          Get.to(Invoicefirstscreen());
-        },
-        child: Icon(Icons.description),
-        labelStyle: TextStyle(fontWeight: FontWeight.bold,fontStyle: FontStyle.italic)
-      ),
-    ],
-   ),
- );
-    
+    );
+  }
+
+  void _handleMenuSelection(String value, BuildContext context) {
+    switch (value) {
+      case "invoices":
+        Get.to(() => Invoicefirstscreen());
+        break;
+      case "clients":
+        Get.to(() => Clientscreen());
+        break;
+      case "reports":
+        Get.to(() => Reportscreen());
+        break;
+      case "items":
+        Get.to(() => Itemscreen());
+        break;
+    }
   }
 }

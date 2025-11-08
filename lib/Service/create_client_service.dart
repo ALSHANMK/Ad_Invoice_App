@@ -2,7 +2,6 @@ import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dar
 import 'package:get/get_connect/connect.dart';
 import 'package:get/get_instance/get_instance.dart';
 import 'package:get/utils.dart';
-import 'package:http/http.dart' as http;
 
 class CreateClientService extends GetConnect {
   final Logincontroller logincontroller=Get.find<Logincontroller>();

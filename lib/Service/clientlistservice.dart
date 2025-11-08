@@ -17,8 +17,8 @@ class Clientlistservice extends GetConnect{
   Future<dynamic> getclient()async{
 
     try{
-      var tenant_id=logincontroller.tenantid.value;
-      final response=await get("clients/list/$tenant_id/",headers: 
+      var tenantId=logincontroller.tenantid.value;
+      final response=await get("clients/list/$tenantId/",headers: 
       {
         'Authorization':'Bearer ${logincontroller.accesstoken.value}'
       });

@@ -73,11 +73,8 @@ class Registrationcontroller extends GetxController{
           colorText: Colors.white,
         );
 
-        if(appid.value!=null)
-        {
-          clearfields();
-        }
-    }catch(e)
+        clearfields();
+          }catch(e)
     {
       Get.snackbar("error", e.toString());
      

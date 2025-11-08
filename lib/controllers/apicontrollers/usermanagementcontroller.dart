@@ -1,8 +1,11 @@
 import 'package:ad_invoice_mobile/Service/usermanagementservice.dart';
+import 'package:ad_invoice_mobile/controllers/apicontrollers/rolecontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Usermanagementcontroller extends GetxController{
+
+  final Rolecontroller rolecontroller=Get.find<Rolecontroller>();
 
   @override
   void onInit() {
@@ -13,13 +16,20 @@ class Usermanagementcontroller extends GetxController{
   var isloading=false.obs;
   var issuccess=false.obs;
   var users=[].obs;
+  var isactive=false.obs;
   final Usermanagementservice usermanagementservice=Get.put(Usermanagementservice());
   final TextEditingController usernamecontroller=TextEditingController();
     final TextEditingController emailcontroller=TextEditingController();
     final TextEditingController passwordcontroller=TextEditingController();
     final TextEditingController firstnamecontroller=TextEditingController();
     final TextEditingController lastnamecontroller=TextEditingController();
-    final TextEditingController rolecontroller=TextEditingController();
+
+
+    final TextEditingController usernameeditcontroller=TextEditingController();
+    final TextEditingController emaileditcontroller=TextEditingController();
+    final TextEditingController passwordeditcontroller=TextEditingController();
+    final TextEditingController firsteditcontroller=TextEditingController();
+    final TextEditingController lasteditcontroller=TextEditingController();
 
 
   Future<void> createus()async{
@@ -33,12 +43,13 @@ class Usermanagementcontroller extends GetxController{
         "password": passwordcontroller.text,
         "first_name":firstnamecontroller.text,
         "last_name": lastnamecontroller.text,
-        "role": rolecontroller.text
+        "role_ids": rolecontroller.selectedRoleIds.map((id) => int.parse(id)).toList(),
 
       };
 
 
       final response=await usermanagementservice.createuser(payload);
+     
 
       issuccess.value=response['message']=="User created successfully"?true:false;
       
@@ -63,7 +74,7 @@ class Usermanagementcontroller extends GetxController{
       final response=await usermanagementservice.getuser();
 
       users.value=response['results'];
-      print(users);
+
       //userid.value=users['id'];
       
   
@@ -82,8 +93,9 @@ class Usermanagementcontroller extends GetxController{
     try{
       isloading.value=true;
 
-
+    
       final response=await usermanagementservice.deleteuser(userid);
+      print(response);
 
     }
     catch(e)
@@ -95,25 +107,47 @@ class Usermanagementcontroller extends GetxController{
     }
   }
 
-  Future<void> updateus()async{
+  Future<void> updateus(int userid)async{
     try{
       isloading.value=true;
 
       final payload={
-         "username": usernamecontroller,
-  "email": emailcontroller,
-  "first_name": firstnamecontroller,
-  "last_name": lastnamecontroller,
-  "role": rolecontroller,
-  "is_active": true,
+         "username": usernameeditcontroller.text.trim(),
+  "email": emaileditcontroller.text.trim(),
+  "first_name": firsteditcontroller.text.trim(),
+  "last_name": lasteditcontroller.text.trim(),
+  "is_active": isactive.value,
+  "role_ids": rolecontroller.selectedRoleIds.map((id) => int.parse(id)).toList(),
       };
 
-      final response=await usermanagementservice.updateuser(payload);
-      print("Response is $response");
+      final response=await usermanagementservice.updateuser(payload,userid);
+      print(response);
+      
+     
+      issuccess.value=response['username']==usernamecontroller.text?true:false;
+
+       if (issuccess.value) {
+    
+      await getus(); 
+      
+      Get.snackbar(
+        "User updated", 
+        "Changes made successfully",
+        backgroundColor: Colors.green[200],
+        duration: Duration(seconds: 2)
+      );
+    } else {
+      Get.snackbar(
+        "Couldn't update user", 
+        "Couldn't make changes",
+        backgroundColor: Colors.red[200],
+        duration: Duration(seconds: 2),
+      );
+    }
     }
     catch(e)
     {
-      print(e);
+      Get.snackbar("error", "$e");
     }
     finally{
       isloading.value=true;
@@ -126,6 +160,6 @@ class Usermanagementcontroller extends GetxController{
     passwordcontroller.clear();
     firstnamecontroller.clear();
     lastnamecontroller.clear();
-    rolecontroller.clear();
+
   }
 }

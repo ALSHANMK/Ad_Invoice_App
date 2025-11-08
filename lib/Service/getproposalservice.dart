@@ -22,10 +22,10 @@ class Getproposalservice extends GetConnect{
     super.onInit();
   }
 //getting proposal
-  Future<dynamic> getproposal(String client_id)async{
+  Future<dynamic> getproposal(String clientId)async{
 
    try{
-    final encodedid = Uri.encodeComponent(client_id);
+    final encodedid = Uri.encodeComponent(clientId);
     print("encoded name is $encodedid");
      final response=await get("proposal/client/$encodedid/",headers: {
       'Authorization':'Bearer ${logincontroller.accesstoken.value}'

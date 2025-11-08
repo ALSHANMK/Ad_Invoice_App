@@ -73,6 +73,7 @@ if (response['success'] == true && response['proposals'] is List) {
     finally{
       isloading.value=false;
     }
+    return null;
 
   }
 
@@ -103,6 +104,7 @@ if (response['success'] == true && response['proposals'] is List) {
     finally{
       isloading.value=false;
     }
+    return null;
   }
   
 }

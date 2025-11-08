@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 class RegisterRequest {
   final String? firstname;

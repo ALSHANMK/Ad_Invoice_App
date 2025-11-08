@@ -1,5 +1,4 @@
 import 'package:ad_invoice_mobile/Service/loginservice.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,7 +54,7 @@ class Logincontroller extends GetxController{
       catch(e)
       {
         Get.snackbar("Error", e.toString());
-        print(e);
+       
       }
       finally{
         isloading.value=false;

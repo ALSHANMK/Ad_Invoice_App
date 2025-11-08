@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart' as responsive;
 
 class Registerscreen extends StatelessWidget {
- Registerscreen({super.key});
+ const Registerscreen({super.key});
 
   
 
@@ -165,7 +165,7 @@ class Registerscreen extends StatelessWidget {
        
         GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const Loginscreen()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => Loginscreen()));
           },
           child: const Text(
             "Already have an account?",

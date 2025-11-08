@@ -1,7 +1,6 @@
 import 'package:ad_invoice_mobile/Service/productlistservice.dart';
 import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 class Productlistcontroller extends GetxController{
 

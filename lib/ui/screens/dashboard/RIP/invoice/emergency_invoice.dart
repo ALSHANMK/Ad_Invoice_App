@@ -1,13 +1,8 @@
-import 'package:ad_invoice_mobile/controllers/apicontrollers/productlistcontroller.dart';
 import 'package:ad_invoice_mobile/controllers/proposalsecondscreencontroller.dart';
-import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicesecondscreen.dart';
-import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/previewscreen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
 
 class EmergencyInvoice extends StatelessWidget {
   const EmergencyInvoice({super.key});

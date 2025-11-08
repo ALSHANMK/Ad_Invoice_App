@@ -2,7 +2,6 @@ import 'package:ad_invoice_mobile/Service/proposalcreationservice.dart';
 import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 class Proposalcreationcontroller extends GetxController {
   var isloading = false.obs;

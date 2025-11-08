@@ -22,7 +22,7 @@ class Receiptfirstscreen extends StatelessWidget {
     final Getproposalcontroller getproposalcontroller=Get.find<Getproposalcontroller>();
     
     final Dropdowncontroller dropdowncontroller=Get.find<Dropdowncontroller>();
-    List<dynamic> _getFilteredInvoices() {
+    List<dynamic> getFilteredInvoices() {
 
   final selectedIndex = userscontroller.selecteduser.value;
   if (selectedIndex == -1) return [];
@@ -177,9 +177,9 @@ class Receiptfirstscreen extends StatelessWidget {
                       hint: Text("Select Invoices",style: TextStyle(fontWeight: FontWeight.bold),),
                       value:dropdowncontroller.selectedvalue.value ,
                       onChanged: dropdowncontroller.changedvalue,
-                      items:_getFilteredInvoices().isEmpty 
+                      items:getFilteredInvoices().isEmpty 
         ? [DropdownMenuItem(value: null, child: Text("No invoices available"))]
-        : _getFilteredInvoices().map<DropdownMenuItem<String>>((invoice) {
+        : getFilteredInvoices().map<DropdownMenuItem<String>>((invoice) {
             return DropdownMenuItem<String>(
               value: invoice['id']?.toString(),
               child: Column(

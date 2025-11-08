@@ -2,7 +2,6 @@ import 'package:ad_invoice_mobile/controllers/apicontrollers/logincontroller.dar
 import 'package:ad_invoice_mobile/ui/screens/auth/forgotscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/registerscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
-import 'package:ad_invoice_mobile/ui/screens/auth/widgets/customforfield.dart';
 
 import 'package:ad_invoice_mobile/ui/screens/dashboard/dashboardmain.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +9,14 @@ import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart' as responsive;
 
 class Loginscreen extends StatelessWidget {
-  const Loginscreen({super.key});
+
+  final Logincontroller logincontroller=Get.find<Logincontroller>();
+  Loginscreen({super.key});
 
   @override
   Widget build(BuildContext context) {
 
-    final Logincontroller logincontroller=Get.put(Logincontroller());
+    
     final bool isMobile = responsive.ResponsiveBreakpoints.of(context).smallerThan(responsive.TABLET);
 
     Widget loginForm = Column(

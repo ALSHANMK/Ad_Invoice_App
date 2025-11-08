@@ -13,7 +13,7 @@ class Forgotscreen extends StatefulWidget {
 
 class _ForgotscreenState extends State<Forgotscreen> {
 
-  final TextEditingController textEditingController=new TextEditingController();
+  final TextEditingController textEditingController=TextEditingController();
   String _otp="3322";
   String _message="";
 

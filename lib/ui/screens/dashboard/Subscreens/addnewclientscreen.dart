@@ -9,364 +9,365 @@ import 'package:get/instance_manager.dart';
 class Addnewclientscreen extends StatelessWidget {
   Addnewclientscreen({super.key});
 
-  final Createclientcontroller createclientcontroller=Get.put(Createclientcontroller());
-  final Listclientcontroller listclientcontroller=Get.find<Listclientcontroller>();
+  final Createclientcontroller createclientcontroller = Get.put(Createclientcontroller());
+  final Listclientcontroller listclientcontroller = Get.find<Listclientcontroller>();
+  final formkey = GlobalKey<FormState>();
+
+  void submitform() {
+    if (formkey.currentState!.validate()) {
+      print("Form is valid");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    final screenheight=MediaQuery.of(context).size.height;
-    final screenwidth=MediaQuery.of(context).size.width;
-    final _formkey=GlobalKey<FormState>();
-
-    void submitform()
-    {
-      if(_formkey.currentState!.validate())
-      {
-        print("Form is valid");
-      }
-    }
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Client"),
-        backgroundColor: const Color.fromARGB(255, 150, 194, 230),
+        title: Text(
+          "Add New Client",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.blue[700],
+        centerTitle: true,
+        elevation: 2,
       ),
       body: Form(
-        key: _formkey,
+        key: formkey,
         child: Column(
-          
           children: [
-              Expanded(
-                child: Container(
-                  height: screenheight/2*1.2,
-                  width: screenwidth,
-                  child: ListView(
-                        padding: EdgeInsets.all(20),
-                        children: [
-                          TextFormField(
-                            validator: (value) {
-                              if(value==null || value.isEmpty)
-                              {
-                                return "Client name is required";
-                              }
-                              return null;
-                            } ,
-                            controller: createclientcontroller.clientnamecontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("Client name"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Industry is required";
-                            }
-                            return null;
-                            },
-                            controller: createclientcontroller.industrycontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("Industry"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          
-                          TextFormField(
-                            validator: (value) {
-                              if(value==null || value.isEmpty)
-                              {
-                                return "This field is required";
-                              }
-                              return null;
-                            },
-                            controller: createclientcontroller.websitecontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("website"),
-                ),
-                          ),
-                           SizedBox(height: 20,),
-                           TextFormField(
-                            validator: (value) {
-                              if(value==null || value.isEmpty)
-                              {
-                                return "This field is required";
-                              }
-                              return null;
-                            },
-                            controller: createclientcontroller.registercontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("register number"),
-                ),
-                          ),
-                           SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Taxid is required";
-                            }
-                            return null;
-                            },
-                            controller: createclientcontroller.taxcontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("taxid"),
-                ),
-                          ),
-                           SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Please provide address 1";
-                            }
-                            return null;
-                            },
-                            controller: createclientcontroller.addresscontroller,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("Address line 1"),
-                  alignLabelWithHint: true,
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Please provide address 2";
-                            }
-                            return null;
-                            },
-                            controller: createclientcontroller.addresscontroller2,
-                maxLines: 3,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("Address line 2"),
-                  alignLabelWithHint: true,
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (value) {
-                              if(value==null || value.isEmpty)
-                              {
-                                return "Please provide city";
-                              }
-                            },
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Client Information",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.clientnamecontroller,
+                      label: "Client Name *",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Client name is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.industrycontroller,
+                      label: "Industry *",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Industry is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.websitecontroller,
+                      label: "Website *",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Website is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.registercontroller,
+                      label: "Registration Number *",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Registration number is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.taxcontroller,
+                      label: "Tax ID *",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Tax ID is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    
+                    SizedBox(height: 24),
+                    Text(
+                      "Address Information",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.addresscontroller,
+                      label: "Address Line 1 *",
+                      maxLines: 2,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Address line 1 is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.addresscontroller2,
+                      label: "Address Line 2 *",
+                      maxLines: 2,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Address line 2 is required";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextFormField(
                             controller: createclientcontroller.citycontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("city"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
+                            label: "City *",
                             validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Please provide state";
-                            }
-                            return null;
+                              if (value == null || value.isEmpty) {
+                                return "City is required";
+                              }
+                              return null;
                             },
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _buildTextFormField(
                             controller: createclientcontroller.statecontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("state"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
+                            label: "State *",
                             validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Please mention country";
-                            }
-                            return null;
+                              if (value == null || value.isEmpty) {
+                                return "State is required";
+                              }
+                              return null;
                             },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildTextFormField(
                             controller: createclientcontroller.countrycontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("country"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
+                            label: "Country *",
                             validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Postal code";
-                            }
-                            if(!GetUtils.isNum(value))
-                            {
-                              return "Please enter a valid postal code";
-                            }
-                            return null;
+                              if (value == null || value.isEmpty) {
+                                return "Country is required";
+                              }
+                              return null;
                             },
-                            controller: createclientcontroller.postalcontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("postal code"),
-                ),
                           ),
-                          SizedBox(height: 20,),
-                          TextFormField(
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: _buildTextFormField(
+                            controller: createclientcontroller.postalcontroller,
+                            label: "Postal Code *",
                             validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Please provide phone";
-                            }
-    
-                           if (!GetUtils.isNum(value)) {
+                              if (value == null || value.isEmpty) {
+                                return "Postal code is required";
+                              }
+                              if (!GetUtils.isNum(value)) {
+                                return "Please enter a valid postal code";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    SizedBox(height: 24),
+                    Text(
+                      "Contact Information",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[800],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.phonecontroller,
+                      label: "Phone Number *",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Phone number is required";
+                        }
+                        if (!GetUtils.isNum(value)) {
                           return "Please enter a valid phone number";
                         }
-                        if(value.length!=10)
-                        {
-                          return "please enter a 10 digit number";
+                        if (value.length != 10) {
+                          return "Please enter a 10 digit number";
                         }
-                            return null;
-                            },
-                            controller: createclientcontroller.phonecontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("phone"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (value) {
-                              
-                            if(value==null || value.isEmpty )
-                            {
-                              return "Please provide email";
-                            }
-                            if(!GetUtils.isEmail(value))
-                            {
-                              return "Enter a valid email";
-                            }
-                            return null;
-                            },
-                            controller: createclientcontroller.emailcontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("email"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            validator: (value) {
-                              if(!GetUtils.isEmail(value!))
-                              {
-                                return "Please enter a valid email";
-                              }
-                            },
-                            controller: createclientcontroller.supportemailcontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("support email"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            controller: createclientcontroller.accountmangercontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("account manager"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                          TextFormField(
-                            controller: createclientcontroller.notescontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  label: Text("note"),
-                ),
-                          ),
-                          SizedBox(height: 20,),
-                        ],
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.emailcontroller,
+                      label: "Email Address *",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email is required";
+                        }
+                        if (!GetUtils.isEmail(value)) {
+                          return "Enter a valid email address";
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.supportemailcontroller,
+                      label: "Support Email *",
+                      validator: (value) {
+                        if (!GetUtils.isEmail(value!)) {
+                          return "Please enter a valid email";
+                        }
+                        return null;
+                      },
+                    ),
+                    
+                    SizedBox(height: 24),
+                    Text(
+                      "Additional Information",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[800],
                       ),
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.accountmangercontroller,
+                      label: "Account Manager",
+                    ),
+                    SizedBox(height: 16),
+                    _buildTextFormField(
+                      controller: createclientcontroller.notescontroller,
+                      label: "Notes",
+                      maxLines: 3,
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
               ),
-              SizedBox(height: 15,),
-            
-              Row(
+            ),
+            Container(
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border(
+                  top: BorderSide(color: Colors.grey[200]!),
+                ),
+              ),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Custombutton(label: "Discard", onpressed: (){}),
-                  SizedBox(width: 20,),
-                  Custombutton(label: "Save", onpressed: ()async{
-                    await createclientcontroller.createclient();
-                    try{
-                      
-                    if(createclientcontroller.issucess.value)
-                    {
-                      listclientcontroller.getclients();
+                  Expanded(
+                    child: Custombutton(
+                      label: "Discard",
+                      onpressed: () {
                         createclientcontroller.clearfield();
-                        Get.snackbar("✅Success", "Client created succesfully!!",backgroundColor: Colors.green[200]);
-                    }
-                    else{
-                      submitform();
-                      Get.snackbar("❌Error", "Looks like you have given wrong info or empty field",backgroundColor: Colors.red[200]);
-                    }
-                    
-                    }
-                    catch(e)
-                    {
-                      Get.snackbar("this error", "$e");
-                    }
-                  }),
+                        Get.back();
+                      },
+                     
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Custombutton(
+                      label: "Save Client",
+                      onpressed: () async {
+                        if (formkey.currentState!.validate()) {
+                          await createclientcontroller.createclient();
+                          try {
+                            if (createclientcontroller.issucess.value) {
+                              listclientcontroller.getclients();
+                              createclientcontroller.clearfield();
+                              Get.snackbar(
+                                "✅ Success",
+                                "Client created successfully!",
+                                backgroundColor: Colors.green[200],
+                              );
+                              Get.back();
+                            } else {
+                              Get.snackbar(
+                                "❌ Error",
+                                "Please check all required fields",
+                                backgroundColor: Colors.red[200],
+                              );
+                            }
+                          } catch (e) {
+                            Get.snackbar("Error", "An error occurred: $e");
+                          }
+                        }
+                      },
+                    ),
+                  ),
                 ],
-              )
+              ),
+            ),
           ],
         ),
-      )
-      
+      ),
+    );
+  }
+
+  Widget _buildTextFormField({
+    required TextEditingController controller,
+    required String label,
+    String? Function(String?)? validator,
+    int maxLines = 1,
+  }) {
+    return TextFormField(
+      controller: controller,
+      validator: validator,
+      maxLines: maxLines,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[400]!),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.blue[700]!),
+        ),
+        filled: true,
+        fillColor: Colors.grey[50],
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        alignLabelWithHint: maxLines > 1,
+      ),
     );
   }
 }

@@ -103,7 +103,7 @@ class Homescreen extends StatelessWidget {
             isThreeLine: true,
             trailing: Icon(Icons.arrow_forward_ios, size: 16, color: const Color.fromARGB(255, 158, 158, 158)),
             onTap: () {
-              print("Tapped ${client["name"]}");
+              
             },
           ),
         );

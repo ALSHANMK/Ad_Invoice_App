@@ -16,7 +16,7 @@ class Profilescreen extends StatelessWidget {
       body: Column(
         
         children: [
-            Container(
+            SizedBox(
               height: screenheight/2,
               width: screenwidth,
               child: ListView(

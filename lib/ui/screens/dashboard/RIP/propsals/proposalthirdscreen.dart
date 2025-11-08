@@ -22,7 +22,7 @@ class Proposalthirdscreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-          Container(
+          SizedBox(
             height: screenheight*0.82,
             child: Proposalpreviewscreen(printbutton: false,),
           ),

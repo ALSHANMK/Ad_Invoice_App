@@ -4,69 +4,155 @@ import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/addnewclientsc
 import 'package:ad_invoice_mobile/ui/screens/dashboard/Subscreens/clientfulldetails.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/get_core.dart';
 
 class Clientscreen extends StatelessWidget {
   Clientscreen({super.key});
 
- 
-
-  final Listclientcontroller listclientcontroller=Get.put(Listclientcontroller());
+  final Listclientcontroller listclientcontroller = Get.put(Listclientcontroller());
 
   @override
   Widget build(BuildContext context) {
-  final screenheight=MediaQuery.of(context).size.height;
+    final screenheight = MediaQuery.of(context).size.height;
     
     return Column(
       children: [
+        // Header
         Container(
-          height: screenheight/2*1.3,
-          child: ListView.builder(
-            itemCount: listclientcontroller.sortedclients.length,
-            itemBuilder: (context, index) {
-              final client = listclientcontroller.sortedclients[index];
-              return Card(
-                elevation: 3,
-                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.person_2_outlined),
-                    
-                    
-                  ),
-                  title: Text(
-                    client["name"]!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text("${client["email"]}\n${client["phone"]}"),
-                  isThreeLine: true,
-                  trailing: IconButton(onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Addnewclientscreen()));
-                  }, icon: Icon(Icons.edit)),
-                  
-                  onTap: () {
-                   Get.to(()=>Clientfulldetails(),arguments: client);
-                  },
+          padding: EdgeInsets.all(16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Clients",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey[800],
                 ),
-              );
-            },
+              ),
+              Obx(() => Text(
+                "${listclientcontroller.sortedclients.length} clients",
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                ),
+              )),
+            ],
           ),
         ),
-        SizedBox(height: 40,),
+
+        // Clients List or Empty State
+        Expanded(
+          child: Obx(() => listclientcontroller.sortedclients.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.people_outline,
+                        size: 64,
+                        color: Colors.grey[300],
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        "No Clients Found",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[500],
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Get started by adding your first client",
+                        style: TextStyle(
+                          color: Colors.grey[400],
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: listclientcontroller.sortedclients.length,
+                  itemBuilder: (context, index) {
+                    final client = listclientcontroller.sortedclients[index];
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 8),
+                      child: Card(
+                        elevation: 2,
+                        margin: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.blue[100],
+                            child: Icon(
+                              Icons.person,
+                              color: Colors.blue[700],
+                              size: 20,
+                            ),
+                          ),
+                          title: Text(
+                            client["name"]!,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15,
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                client["email"] ?? "No email",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              SizedBox(height: 2),
+                              Text(
+                                client["phone"] ?? "No phone",
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {
+                              Get.to(() => Addnewclientscreen());
+                            },
+                            icon: Icon(
+                              Icons.edit,
+                              color: Colors.blue[600],
+                              size: 20,
+                            ),
+                          ),
+                          onTap: () {
+                            Get.to(() => Clientfulldetails(), arguments: client);
+                          },
+                        ),
+                      ),
+                    );
+                  },
+                ),
+          ),
+        ),
+
+        // Add Client Button
         Container(
-          child: Column(
-            children: [
-              SizedBox(
-                width: 200,
-                child: Custombutton(label: "Add new Client", onpressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Addnewclientscreen()));
-                }),
-              )
-            ],
+          padding: EdgeInsets.all(16),
+          child: SizedBox(
+            width: double.infinity,
+            child: Custombutton(
+              label: "Add New Client", 
+              onpressed: () {
+                Get.to(() => Addnewclientscreen());
+              }
+            ),
           ),
         )
       ],
