@@ -21,16 +21,9 @@ class Rolecontroller extends GetxController{
    var selectedPermissionIds = <String>[].obs;
    var selectedRoleIds = <String>[].obs;
    var selectedRoleIdsedit=<String>[].obs;
-   var currentUserPermissions = [].obs;
+
   
 
-  void setUserPermissions(List<dynamic> permissions) {
-    currentUserPermissions.value = permissions;
-  }
-
-  List<String> get currentUserPermissionCodes {
-    return currentUserPermissions.map((p) => p['code'].toString()).toList();
-  }
 
     void toggleRole(String roleId) {
     if (selectedRoleIds.contains(roleId)) {

@@ -7,15 +7,16 @@ import 'package:get/get_utils/src/get_utils/get_utils.dart';
 import 'package:get/instance_manager.dart';
 
 class Addnewclientscreen extends StatelessWidget {
+  final Createclientcontroller createclientcontroller = Get.find<Createclientcontroller>();
   Addnewclientscreen({super.key});
 
-  final Createclientcontroller createclientcontroller = Get.put(Createclientcontroller());
+  
   final Listclientcontroller listclientcontroller = Get.find<Listclientcontroller>();
   final formkey = GlobalKey<FormState>();
 
   void submitform() {
     if (formkey.currentState!.validate()) {
-      print("Form is valid");
+     
     }
   }
 

@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Addnewproductscreen extends StatelessWidget {
-  const Addnewproductscreen({super.key});
+  Addnewproductscreen({super.key});
+
+    final Addproductcontroller addproductcontroller = Get.find<Addproductcontroller>();
+    final Productlistcontroller productlistcontroller = Get.find<Productlistcontroller>();
 
   @override
   Widget build(BuildContext context) {
     final formkey = GlobalKey<FormState>();
-    final Addproductcontroller addproductcontroller = Get.put(Addproductcontroller());
-    final Productlistcontroller productlistcontroller = Get.find<Productlistcontroller>();
+    
 
     void submitform() {
       if (formkey.currentState!.validate()) {
@@ -196,7 +198,7 @@ class Addnewproductscreen extends StatelessWidget {
                         ),
                       ],
                     )),
-                    SizedBox(height: 40), // Extra space for bottom buttons
+                    SizedBox(height: 40), 
                   ],
                 ),
               ),

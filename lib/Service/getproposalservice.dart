@@ -26,9 +26,10 @@ class Getproposalservice extends GetConnect{
 
    try{
     final encodedid = Uri.encodeComponent(clientId);
-    print("encoded name is $encodedid");
+    
      final response=await get("proposal/client/$encodedid/",headers: {
-      'Authorization':'Bearer ${logincontroller.accesstoken.value}'
+      'Authorization':'Bearer ${logincontroller.accesstoken.value}',
+      
     });
     return response.body;
    }

@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 class Createclientcontroller extends GetxController{
 
-  final CreateClientService createClientService=Get.find();
+  final CreateClientService createClientService=Get.find<CreateClientService>();
   final Logincontroller logincontroller=Get.find<Logincontroller>();
 
   var isloading=false.obs;
@@ -57,6 +57,7 @@ class Createclientcontroller extends GetxController{
       };
 
       final response=await createClientService.createclient(payload);
+      print("the response is $response");
        if (response['success'] == null) {
         issucess.value = false;
         } else {

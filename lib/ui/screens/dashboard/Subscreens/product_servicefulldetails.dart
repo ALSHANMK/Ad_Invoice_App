@@ -59,7 +59,7 @@ class ProductServicefulldetails extends StatelessWidget {
             SizedBox(height: 20),
             
             // Description Section
-            if (products['description'] != null && products['description'].isNotEmpty)
+            if (products['description'] != null && (products['description'] as String).isNotEmpty)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -102,11 +102,11 @@ class ProductServicefulldetails extends StatelessWidget {
                   "Type", 
                   isService ? "Service" : "Product"
                 ),
-                if (products['category'] != null && products['category'].isNotEmpty)
+                if (products['category'] != null)
                   _buildInfoRow(
                     Icons.label, 
                     "Category", 
-                    products['category']
+                    products['category'].toString()
                   ),
               ],
             ),

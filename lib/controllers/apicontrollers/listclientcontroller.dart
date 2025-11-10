@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 class Listclientcontroller extends GetxController{
 
-  final Clientlistservice clientlistservice=Get.find();
+  final Clientlistservice clientlistservice=Get.find<Clientlistservice>();
 
   var clients=[].obs;
   var isloading=false.obs;

@@ -32,6 +32,8 @@ class Proposalpreviewscreen extends StatelessWidget {
         'Category':item['type'],
       };
 }).toList();
+
+print("Selected items are $selecteditems");
     
     /*final totalbill=selecteditems.fold(0.0, (sum,item)
     {

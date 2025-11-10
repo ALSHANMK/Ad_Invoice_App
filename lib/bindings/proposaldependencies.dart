@@ -10,10 +10,11 @@ class Proposaldependencies {
 
   static void init(){
 
-    Get.lazyPut(()=>Proposalcreationservice());
-  Get.lazyPut(()=>Proposalsecondscreencontroller());
-  Get.lazyPut(()=>Proposalcreationcontroller());
-  Get.lazyPut(()=>Getproposalcontroller());
-  Get.lazyPut(()=>Getproposalservice());
+  Get.lazyPut(()=>Getproposalservice(),fenix: true);
+  Get.lazyPut(()=>Proposalcreationservice(),fenix: true);
+  Get.lazyPut(()=>Proposalsecondscreencontroller(),fenix: true);
+  Get.lazyPut(()=>Proposalcreationcontroller(),fenix: true);
+  Get.lazyPut(()=>Getproposalcontroller(),fenix: true);
+  
   }
 }

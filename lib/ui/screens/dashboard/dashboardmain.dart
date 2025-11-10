@@ -1,4 +1,4 @@
-import 'package:ad_invoice_mobile/Service/permissionservice.dart';
+
 import 'package:ad_invoice_mobile/controllers/dashboardcontroller.dart';
 import 'package:ad_invoice_mobile/controllers/apicontrollers/notificationandsupportcontroller.dart';
 import 'package:ad_invoice_mobile/ui/screens/auth/registerscreen.dart';
@@ -19,7 +19,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class Dashboardmain extends StatelessWidget {
   Dashboardmain({super.key});
-  final permissionService = Get.find<PermissionService>();
+
       final Dashboardcontroller dashboardcontroller = Get.put(Dashboardcontroller());
     final Notificationandsupportcontroller notificationcontroller = Get.put(Notificationandsupportcontroller());
 
@@ -49,18 +49,9 @@ class Dashboardmain extends StatelessWidget {
               icon: Icon(Icons.person_outline),
               tooltip: "Profile",
             ),
-            SizedBox(width: 8),
+            SizedBox(width: 20),
             Expanded(
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  border: InputBorder.none,
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  suffixIcon: Icon(Icons.search, color: Colors.grey[600]),
-                ),
-              ),
+              child: Text("Welcome user !!",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),)
             ),
           ],
         ),

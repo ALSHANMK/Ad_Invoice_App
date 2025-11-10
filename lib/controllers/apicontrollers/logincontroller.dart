@@ -13,6 +13,7 @@ class Logincontroller extends GetxController{
   var accesstoken=''.obs;
   var userid=0.obs;
   var tenantid=0.obs;
+  var role=''.obs;
   
   
 
@@ -33,6 +34,8 @@ class Logincontroller extends GetxController{
           accesstoken.value=response['access'];
           userid.value=response['user_id'];
           tenantid.value=response['tenant_id'];
+          role.value=response['role'];
+          print(role);
         }
 
 

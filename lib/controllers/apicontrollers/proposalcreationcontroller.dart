@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Proposalcreationcontroller extends GetxController {
+   final Logincontroller logincontroller = Get.find<Logincontroller>();
+  final Proposalcreationservice proposalcreationservice = Get.find<Proposalcreationservice>();
   var isloading = false.obs;
   var proposalNumber = ''.obs;
   var invoicenumber = ''.obs;
   var receiptnum=''.obs;
-  final Logincontroller logincontroller = Get.find<Logincontroller>();
-  final Proposalcreationservice proposalcreationservice = Get.put(
-    Proposalcreationservice(),
-  );
   final now = DateTime.now();
   var issucess = false.obs;
   var issucessinvo = false.obs;
@@ -30,14 +28,20 @@ class Proposalcreationcontroller extends GetxController {
         "proposal_number":
             '${now.year}${now.month}${now.day}-${now.millisecondsSinceEpoch}',
         "client_name": client['name'] ?? '',
+        "client_email":client['email'] ?? '',
+        "client_phone":client['phone'] ?? '',
         "company_name": "Your Company Name",
         "date": DateTime.now().toString().split(' ')[0],
+        "due_date": DateTime.now().add(Duration(days: 30)).toString().split(' ')[0],
         "items": _buildItemsPayload(selecteditems),
         "client_id": client['id'].toString(),
         "subtotal": calculateSubtotal(selecteditems),
+        "grand_total":calculateGrandTotal(selecteditems),
+        "total_gst":calculateGST(selecteditems),
       };
 
       final response = await proposalcreationservice.createprop(payload);
+     
       issucess.value = response['success'] == 'Proposal created successfully'
           ? true
           : false;
@@ -48,6 +52,7 @@ class Proposalcreationcontroller extends GetxController {
     icon: issucess.value?Icon(Icons.check,color: Colors.green,):Icon(Icons.error,color: Colors.red,));*/
     } catch (e) {
       Get.snackbar("Network error", "$e");
+      print(e);
     } finally {
       isloading.value = false;
     }
@@ -55,12 +60,15 @@ class Proposalcreationcontroller extends GetxController {
 
   List<Map<String, dynamic>> _buildItemsPayload(List<Map<String, dynamic>> selectedItems,) {
     return selectedItems.map((item) {
+
+   
+     
       return {
         "name": item['name'] ?? '',
         "description": item['description'] ?? '',
         "quantity": item['quantity'] ?? 1,
         "price": item['price'] ?? 0.0,
-        "gst_rate": item['price'] ?? 0.0,
+         "gst_rate": 0.6,
         "type": item['type'] ?? 'product',
       };
     }).toList();

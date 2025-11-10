@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Proposalfirstscreen extends StatelessWidget {
-  const Proposalfirstscreen({super.key});
+  Proposalfirstscreen({super.key});
+   final Userscontroller userscontroller = Get.find<Userscontroller>();
 
   @override
   Widget build(BuildContext context) {
-    final Userscontroller userscontroller = Get.put(Userscontroller());
+   
     final screenheight = MediaQuery.of(context).size.height;
     final screenwidth = MediaQuery.of(context).size.width;
 

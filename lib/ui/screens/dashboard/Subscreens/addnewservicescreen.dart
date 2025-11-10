@@ -8,7 +8,7 @@ class Addnewservicescreen extends StatelessWidget {
   Addnewservicescreen({super.key});
   
   final _formkey = GlobalKey<FormState>();
-  final Addproductcontroller addproductcontroller = Get.put(Addproductcontroller());
+  final Addproductcontroller addproductcontroller = Get.find<Addproductcontroller>();
   final Productlistcontroller productlistcontroller = Get.find<Productlistcontroller>();
 
   void submitform() {

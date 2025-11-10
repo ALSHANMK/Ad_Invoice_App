@@ -28,7 +28,7 @@ class Addproductcontroller extends GetxController{
       isloading.value=true;
       final payload={
         "tenant": logincontroller.tenantid.value,
-      "type": typecontroller.text.trim(), 
+      "type": typecontroller.text.trim().toLowerCase(), 
       "category": int.tryParse(categorycontroller.text.trim()), 
       "name": namecontroller.text.trim(), 
       "description":descriptioncontroller.text.trim(), 
@@ -40,6 +40,8 @@ class Addproductcontroller extends GetxController{
       };
 
       final response=await addproductservice.addproduct(payload);
+
+      print("Add product response $response");
        
       
       isSuccess.value = response['success'] == "Product/Service created successfully";

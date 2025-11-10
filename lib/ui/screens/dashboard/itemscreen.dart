@@ -59,7 +59,7 @@ class Itemscreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        "Total: ${productlistcontroller.products.where((item) => item['type'] == 'product').length}",
+                        "Total: ${productlistcontroller.products.where((item) => item['type'] == 'product'.toLowerCase()).length}",
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey[600],
@@ -71,7 +71,7 @@ class Itemscreen extends StatelessWidget {
                 const SizedBox(height: 16),
                 Expanded(
                   child: Obx(() {
-                    final products = productlistcontroller.products.where((item) => item['type'] == 'product').toList();
+                    final products = productlistcontroller.products.where((item) => item['type'] == 'product'.toLowerCase()).toList();
                     
                     if (products.isEmpty) {
                       return Center(
