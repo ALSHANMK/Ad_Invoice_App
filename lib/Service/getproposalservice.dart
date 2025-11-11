@@ -30,6 +30,8 @@ class Getproposalservice extends GetConnect{
      final response=await get("proposal/client/$encodedid/",headers: {
       'Authorization':'Bearer ${logincontroller.accesstoken.value}',
       
+      
+      
     });
     return response.body;
    }
@@ -52,7 +54,7 @@ class Getproposalservice extends GetConnect{
     catch(e)
     {
       Get.snackbar("Error fetchting proposal items", "$e");
-      print("error fetching items $e");
+      
     }
   }
 

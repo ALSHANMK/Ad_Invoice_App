@@ -43,7 +43,10 @@ class Proposalcreationservice extends GetConnect{
      Future<dynamic> createreceipt(Map<String,dynamic> data)async
   {
     try{
-      final response=await post("receipts/create/", data);
+      final response=await post("receipts/create/", data,
+      headers: {
+        'Authorization':'Bearer ${logincontroller.accesstoken.value}'
+      });
       return response.body;
     }
     catch(e)

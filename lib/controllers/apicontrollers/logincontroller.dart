@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class Logincontroller extends GetxController{
 
-  final Loginservice loginservice=Get.find();
+  final Loginservice loginservice=Get.find<Loginservice>();
 
   TextEditingController usernamecontroller=TextEditingController();
   TextEditingController passwordcontroller=TextEditingController();

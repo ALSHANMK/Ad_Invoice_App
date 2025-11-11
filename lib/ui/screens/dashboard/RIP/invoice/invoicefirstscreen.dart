@@ -21,6 +21,7 @@ class Invoicefirstscreen extends StatelessWidget {
     
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Create Invoice"),
         backgroundColor: Colors.blue[700],
       ),
@@ -96,7 +97,7 @@ class Invoicefirstscreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final client = userscontroller.filteredusers[index];
                   final userid = client['id'];
-                  print(userid);
+                 
                   
                   return Obx(() {
                     final isselected = userscontroller.selecteduser.value == index;
@@ -108,12 +109,22 @@ class Invoicefirstscreen extends StatelessWidget {
                       child: ListTile(
                         onTap: () async {
                           try {
-                            userscontroller.selection(index);
-                            await getproposalcontroller.getprop(userid);
-                          } catch (e) {
-                            Get.snackbar("Error", "Failed to load proposals");
-                          }
-                        },
+    
+                              userscontroller.selection(index);
+
+                              //only fetch if user is newly selected
+                              if (userscontroller.selecteduser.value == index) {
+                                await getproposalcontroller.getprop(userid);
+                              } else {
+                                //clear proposals when deselected
+                                getproposalcontroller.proposal.clear();
+                                final dropdowncontroller = Get.find<Dropdowncontroller>();
+                                dropdowncontroller.selectedvalue.value = null;
+                              }
+                            } catch (e) {
+                              Get.snackbar("Error", "Failed to load proposals");
+                            }
+                          },
                         leading: Icon(
                           Icons.person,
                           color: isselected ? Colors.blue[700] : Colors.grey,
@@ -182,7 +193,12 @@ class Invoicefirstscreen extends StatelessWidget {
                 Expanded(
                   child: Custombutton(
                     label: "Cancel", 
-                    onpressed: () => Get.back(),
+                    onpressed: () {
+                       getproposalcontroller.proposal.clear();
+                                final dropdowncontroller = Get.find<Dropdowncontroller>();
+                                dropdowncontroller.selectedvalue.value = null;
+                       Get.back();
+                    }
                   ),
                 ),
                 SizedBox(width: 16),

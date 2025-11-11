@@ -36,7 +36,9 @@ class Previewscreen extends StatelessWidget {
     final screenheight=MediaQuery.of(context).size.height;
     final screenwidth=MediaQuery.of(context).size.width;
     final List<Map<String,dynamic>> items=args['items'];
+    print(items);
     final Map<String,dynamic> client=args['client'];
+    
     
     
 
@@ -53,6 +55,15 @@ class Previewscreen extends StatelessWidget {
 for (var item in items) {
   totalBill += double.parse(item['total'].toString());
 }
+
+double gst=0.0;
+for(var item in items)
+{
+  gst+=double.parse(item['gst_rate'].toString());
+}
+
+double grand_total=gst+totalBill;
+
 
     final Map<int,Color> templatefontcolors={
       1:Colors.white,
@@ -114,71 +125,99 @@ for (var item in items) {
             
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Table(
-                              columnWidths: {
-                                0:FlexColumnWidth(1.5),
-                                1:FlexColumnWidth(1.5),
-                                2:FlexColumnWidth(1.5),
-                              },
-                              border: TableBorder.all(color: Colors.white,width: 0),
-                              children: [
-                                TableRow(
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue[50],
+                       child: Table(
+                                border: TableBorder.all(color: Colors.grey.shade300, width: 0.5),
+                                columnWidths: const {
+                                  0: FlexColumnWidth(1.2),
+                                  1: FlexColumnWidth(1.2),
+                                  2: FlexColumnWidth(1.6),
+                                },
+                                children: [
+                                  // Header Row
+                                  TableRow(
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue[50],
+                                    ),
+                                    children: const [
+                                      Padding(
+                                        padding: EdgeInsets.all(6.0),
+                                        child: Text(
+                                          "Bill To",
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(6.0),
+                                        child: Text(
+                                          "Ship To",
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(6.0),
+                                        child: Text(
+                                          "Invoice Details",
+                                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 10),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  children: [
-                                    Text("Bill To",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 10),),
-                                    
-                                    Text("Ship To",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 10),),
-                                    
-                                    Text("Invoice Details",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 10),),
-                                    
-                                    
-                                  ]
-                                ),
-                                TableRow(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("${client['name']},",style: TextStyle(fontSize: 8),),
-                                          
-                                          Text("${client['Location']}",style: TextStyle(fontSize: 8),),
-                                         
-                                          Text("${client['Company']}",style: TextStyle(fontSize: 8),),
-                                          
-                                        ],
+
+                                  // Details Row
+                                  TableRow(
+                                    children: [
+                                      // Bill To
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("${client['name'] ?? ''},",
+                                                style: const TextStyle(fontSize: 8, height: 1.4)),
+                                            if (client['Location'] != null)
+                                              Text("${client['Location']}",
+                                                  style: const TextStyle(fontSize: 8)),
+                                            if (client['Company'] != null)
+                                              Text("${client['Company']}", style: const TextStyle(fontSize: 8)),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                         
-                                          
-                                        ],
+
+                                      // Ship To (same as Bill To)
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text("${client['name'] ?? ''},",
+                                                style: const TextStyle(fontSize: 8, height: 1.4)),
+                                            if (client['Location'] != null)
+                                              Text("${client['Location']}",
+                                                  style: const TextStyle(fontSize: 8)),
+                                            if (client['Company'] != null)
+                                              Text("${client['Company']}", style: const TextStyle(fontSize: 8)),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
+
+                                      // Invoice Details
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
                                             buildinvoiceRow('Invoice #:', '3211'),
                                             buildinvoiceRow('Date:', '21-01-2025'),
                                             buildinvoiceRow('P.O. #:', '123'),
                                             buildinvoiceRow('Due Date:', '23-02-2025'),
                                             buildinvoiceRow('Terms:', 'Net 30'),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    )
-                                  ]
-                                )
-                              ],
-                            )
+                                    ],
+                                  ),
+                                ],
+                              )
                           ),
               
                       Column(
@@ -263,9 +302,9 @@ for (var item in items) {
                                      children: [
                                        Text("Total item Bill =$totalBill ",
                                             style:  TextStyle(fontSize: 10,color: Colors.black,decoration: TextDecoration.none,)),
-                                            Text("GST=",style: TextStyle(fontSize: 10,color: Colors.black,decoration: TextDecoration.none),),
+                                            Text("GST=$gst",style: TextStyle(fontSize: 10,color: Colors.black,decoration: TextDecoration.none),),
                                            
-                                            Text("Grand Total=",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
+                                            Text("Grand Total=$grand_total",style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
                                      ],
                                    ),
                                  ),

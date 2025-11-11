@@ -1,6 +1,7 @@
-import 'package:ad_invoice_mobile/controllers/radiobuttoncontroller.dart';
+
 import 'package:ad_invoice_mobile/ui/screens/auth/widgets/custombutton.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/emergency_invoice.dart';
+import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/invoicefirstscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/itemeditscreen.dart';
 import 'package:ad_invoice_mobile/ui/screens/dashboard/RIP/invoice/previewscreen.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +18,16 @@ class _InvoicesecondscreenState extends State<Invoicesecondscreen> {
 
 late List<Map<String,dynamic>> items;
     late Map<String,dynamic> client;
+    
 
     @override
     void initState(){
       super.initState();
       final args=Get.arguments;
-      items=List<Map<String,dynamic>>.from(args['items']??[]);
-      print("items are $items");
+       items=List<Map<String,dynamic>>.from(args['items']??[]);
       client=Map<String,dynamic>.from(args['clients']);
     }
-  final Radiobuttoncontroller radiobuttoncontroller=Get.find<Radiobuttoncontroller>();
+  
   @override
   Widget build(BuildContext context) {
 
@@ -71,7 +72,7 @@ late List<Map<String,dynamic>> items;
             SizedBox(height: 5,),
 
             Custombutton(label: "Go Back", onpressed: (){
-              Get.to(()=>EmergencyInvoice());
+              Get.to(()=>Invoicefirstscreen());
             })
 
           ],
@@ -99,14 +100,14 @@ late List<Map<String,dynamic>> items;
                       {
                         if(index>=items.length) return SizedBox.shrink();
                         final item=items[index];
-                        final isproduct=item['Category']=='Product';
+                        final isproduct=item['item_type']=='product';
                         return Card(
                           elevation: 6,
                           child: ListTile(
                             isThreeLine: true,
                             title: Text(item['name']),
-                            subtitle: isproduct?Text("Price:${item['Price']}\nQuantity:${item['Qnty']}\n${item['Category']}"):
-                            Text("Rate:${item['Rate']}\nWorkers:${item['Workers']}\n${item['Category']}"),
+                            subtitle: isproduct?Text("Price:${item['price']}\nQuantity:${item['quantity']}\n${item['item_type']}"):
+                            Text("Rate:${item['price']}\nWorkers:${item['quantity']}\n${item['item_type']}"),
                             trailing: IconButton(onPressed: () async{
                                 final updated=await Get.to(()=>Itemeditscreen(),arguments: item 
                                 );

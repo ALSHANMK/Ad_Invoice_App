@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 class Registrationcontroller extends GetxController{
 
-  final Registerservice registerservice=Get.find();
+  final Registerservice registerservice=Get.find<Registerservice>();
 
 
   var appid=0.obs;

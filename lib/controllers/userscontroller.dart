@@ -57,16 +57,20 @@ class Userscontroller extends GetxController{
     filteredusers.assignAll(users);
   }
 
-  void filtering(String query)
-  {
-    if(query.isEmpty)
-    {
-      filteredusers.assignAll(users);
-    }
-    else {
-      filteredusers.assignAll(users.where((p)=>p['name'].toString().toLowerCase().contains(query.toLowerCase())));
-    }
+  void filtering(String query) {
+  // Reset selection when search changes
+  selecteduser.value = -1;
+  
+  // Your existing filtering logic
+  if (query.isEmpty) {
+    filteredusers.value = users;
+  } else {
+    filteredusers.value = users.where((user) {
+      final name = user['name']?.toLowerCase() ?? '';
+      return name.contains(query.toLowerCase());
+    }).toList();
   }
+}
 
   void selection(int index)
   {

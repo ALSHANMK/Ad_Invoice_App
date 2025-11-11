@@ -19,13 +19,7 @@ class Getproposalcontroller extends GetxController{
       isloading.value=true;
       final response=await getproposalservice.getproposal(clientname);
 
-      print("proposal for this client $response");
-
-
-      Get.snackbar(response['success']==true?"Proposal fetched":"Cant get proposal",
-       response['success']==true?"now you can select your proposal":"try again",
-       backgroundColor:response['success']==true?Colors.green[200]:Colors.red );
-       
+     
  
 
 

@@ -149,37 +149,42 @@ class Dashboardmain extends StatelessWidget {
         ),
       )),
 
-      floatingActionButton: SpeedDial(
-        backgroundColor: Colors.blue[700],
-        foregroundColor: Colors.white,
-        overlayColor: Colors.black54,
-        buttonSize: Size(56, 56),
-        icon: Icons.add,
-        activeIcon: Icons.close,
-        children: [
-          SpeedDialChild(
-            backgroundColor: Colors.blue[600],
-            foregroundColor: Colors.white,
-            label: "New Invoice",
-            onTap: () => Get.to(() => Invoicefirstscreen()),
-            child: Icon(Icons.description, size: 20),
-          ),
-          SpeedDialChild(
-            backgroundColor: Colors.blue[600],
-            foregroundColor: Colors.white,
-            label: "New Proposal",
-            onTap: () => Get.to(() => Proposalfirstscreen()),
-            child: Icon(Icons.receipt, size: 20),
-          ),
-          SpeedDialChild(
-            backgroundColor: Colors.blue[600],
-            foregroundColor: Colors.white,
-            label: "New Receipt",
-            onTap: () => Get.to(() => Receiptfirstscreen()),
-            child: Icon(Icons.payment, size: 20),
-          ),
-        ],
-      ),
+     floatingActionButton: SpeedDial(
+  backgroundColor: Colors.transparent,
+  foregroundColor: Colors.blue[700],
+  overlayColor: Colors.black54,
+  buttonSize: Size(48, 48),
+  icon: Icons.add,
+  activeIcon: Icons.close,
+  visible: true,
+  curve: Curves.bounceIn,
+  childMargin: EdgeInsets.all(8),
+  childrenButtonSize: Size(44, 44),
+  spacing: 8,
+  children: [
+    SpeedDialChild(
+      backgroundColor: Colors.blue[700]!.withOpacity(0.9),
+      foregroundColor: Colors.white,
+      label: "New Invoice",
+      onTap: () => Get.to(() => Invoicefirstscreen()),
+      child: Icon(Icons.description, size: 18),
+    ),
+    SpeedDialChild(
+      backgroundColor: Colors.blue[700]!.withOpacity(0.9),
+      foregroundColor: Colors.white,
+      label: "New Proposal",
+      onTap: () => Get.to(() => Proposalfirstscreen()),
+      child: Icon(Icons.receipt, size: 18),
+    ),
+    SpeedDialChild(
+      backgroundColor: Colors.blue[700]!.withOpacity(0.9),
+      foregroundColor: Colors.white,
+      label: "New Receipt",
+      onTap: () => Get.to(() => Receiptfirstscreen()),
+      child: Icon(Icons.payment, size: 18),
+    ),
+  ],
+),
     );
   }
 

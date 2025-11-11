@@ -52,7 +52,7 @@ class Proposalcreationcontroller extends GetxController {
     icon: issucess.value?Icon(Icons.check,color: Colors.green,):Icon(Icons.error,color: Colors.red,));*/
     } catch (e) {
       Get.snackbar("Network error", "$e");
-      print(e);
+      
     } finally {
       isloading.value = false;
     }
@@ -142,7 +142,7 @@ class Proposalcreationcontroller extends GetxController {
     icon: issucess.value?Icon(Icons.check,color: Colors.green,):Icon(Icons.error,color: Colors.red,));*/
     } catch (e) {
       Get.snackbar("Network error", "$e");
-      print("someerror in making invoice $e");
+      
     } finally {
       isloading.value = false;
     }
@@ -164,7 +164,6 @@ class Proposalcreationcontroller extends GetxController {
       "total_amount":invoice['grand_total']
     };
     final response=await proposalcreationservice.createreceipt(payload);
-    print(response);
     issucessreceipt.value=response['message']=="Receipt created successfully";
     
 
@@ -175,7 +174,7 @@ class Proposalcreationcontroller extends GetxController {
   }
   catch(e)
   {
-    print("error in controller $e");
+    Get.snackbar("Error", "$e");
   }
   finally{
     isloading.value=false;

@@ -8,123 +8,341 @@ class Receiptsecondscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args=Get.arguments;
-    final invoice=args['items']['invoice'];
-    final screenheight=MediaQuery.of(context).size.height;
-    final screenwidth=MediaQuery.of(context).size.width;
+    final args = Get.arguments;
+    final invoice = args['items']['invoice'];
+    final screenheight = MediaQuery.of(context).size.height;
+    final screenwidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(title: Text("Receipt"),backgroundColor:Colors.blue,),
-      backgroundColor: Colors.blue[50],
-      
-      body: Column(
-        children: [
-          Center(
-            child: Container(
-              margin: EdgeInsetsGeometry.all(12),
-              height: screenheight*0.6,
-              width: screenwidth*0.8,
+      appBar: AppBar(
+        title: Text(
+          "Payment Summary",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.blue[700],
+        centerTitle: true,
+      ),
+      backgroundColor: Colors.grey[50],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Payment Summary Card
+            Container(
+              margin: EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey,width: 2),
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+                border: Border.all(color: Colors.blue[100]!, width: 1),
               ),
-            
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
               child: Column(
-                
                 children: [
-                   SizedBox(
-                      width: screenwidth*0.6,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Total Amount",style: TextStyle(fontWeight: FontWeight.bold,),),
-                          SizedBox(height: 4,),
-                          TextFormField(
-                            readOnly: true,
-                            initialValue: "${invoice['subtotal']}",
-                            decoration: InputDecoration(
-                              suffixIcon: Icon(Icons.monetization_on,color: Colors.blue,),
-                              //label: Text("10000",style: TextStyle(fontWeight: FontWeight.bold),),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                              )
-                            ),
+                  // Header
+                  Row(
+                    children: [
+                      Icon(Icons.receipt_long, color: Colors.blue[700], size: 24),
+                      SizedBox(width: 12),
+                      Text(
+                        "Payment Details",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue[700],
+                        ),
+                      ),
+                    ],
+                  ),
+                  
+                  Divider(color: Colors.grey[300], height: 30),
+                  
+                  // Total Amount
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.green[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.green[100]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.green[100],
+                            shape: BoxShape.circle,
                           ),
-                          SizedBox(height: 10,),
-                          Text("Received Amount",style: TextStyle(fontWeight: FontWeight.bold),),
-                          SizedBox(height: 4,),
-                          TextFormField(
-                            readOnly: true,
-                            initialValue: "${invoice['amount_paid']}",
-                            decoration: InputDecoration(
-                              suffixIcon: Icon(Icons.payment_outlined,color: Colors.blue,),
-                             // label: Text("3000",style: TextStyle(fontWeight: FontWeight.bold),),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                              )
-                            ),
+                          child: Icon(Icons.monetization_on, color: Colors.green[700], size: 20),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Total Amount",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "${invoice['subtotal']}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 10,),
-                          Text("Payable",style: TextStyle(fontWeight: FontWeight.bold),),
-                          SizedBox(height: 4,),
-                          TextFormField(
-                            readOnly: true,
-                            initialValue: "${invoice['balance_due']}",
-                            decoration: InputDecoration(
-                              suffixIcon: Icon(Icons.balance_sharp,color: Colors.blue,),
-                              //label: Text("7000",style: TextStyle(fontWeight: FontWeight.bold),),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              )
-                            ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  SizedBox(height: 16),
+                  
+                  // Received Amount
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.blue[100]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.blue[100],
+                            shape: BoxShape.circle,
                           ),
-                          SizedBox(height: 10,),
-                          Text("Due Date",style: TextStyle(fontWeight: FontWeight.bold),),
-                          SizedBox(height: 4,),
-                          TextFormField(
-                            readOnly: true,
-                            initialValue: "${invoice['due_date']}",
-                            decoration: InputDecoration(
-                              suffixIcon: Icon(Icons.calendar_month_outlined,color: Colors.blue,),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              )
-                            ),
-            
-                          )
-                        ],
+                          child: Icon(Icons.payment, color: Colors.blue[700], size: 20),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Received Amount",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "${invoice['amount_paid']}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  SizedBox(height: 16),
+                  
+                  // Balance Due
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.orange[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.orange[100]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.orange[100],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.balance, color: Colors.orange[700], size: 20),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Balance Due",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "${invoice['balance_due']}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  SizedBox(height: 16),
+                  
+                  // Due Date
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.purple[50],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.purple[100]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.purple[100],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.calendar_today, color: Colors.purple[700], size: 20),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Due Date",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                "${invoice['due_date']}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey[800],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Status Card
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 6,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 12,
+                    height: 12,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: double.parse(invoice['balance_due']?.toString() ?? "0") == 0
+                          ? Colors.green
+                          : Colors.orange,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      double.parse(invoice['balance_due']?.toString() ?? "0") == 0
+                          ? "Payment Completed ✅"
+                          : "Pending Balance ⚠️",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: double.parse(invoice['balance_due']?.toString() ?? "0") == 0
+                            ? Colors.green[700]
+                            : Colors.orange[700],
                       ),
                     ),
+                  ),
                 ],
               ),
             ),
-            ),
-          ),
-          Center(
-            child: Container(
-              margin: EdgeInsetsGeometry.all(12),
-              height: screenheight*0.2,
-              width: screenwidth*0.8,
-              
+
+            SizedBox(height: 30),
+
+            // Action Buttons
+            Container(
+              padding: EdgeInsets.all(20),
               child: Row(
-               crossAxisAlignment: CrossAxisAlignment.center,
-               mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Custombutton(label: "Back", onpressed: (){
-                    Get.back();
-                  }),
-                  SizedBox(width: 15,),
-                  Custombutton(label: "Next", onpressed: (){
-                    Get.to(()=>Recieptpreview(),arguments: args);
-                  }),
+                  Expanded(
+                    child: Custombutton(
+                      label: "Back",
+                      onpressed: () {
+                        Get.back();
+                      },
+                  
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: Custombutton(
+                      label: "Generate Receipt",
+                      onpressed: () {
+                        Get.to(() => Recieptpreview(), arguments: args);
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
-          ),
-        ],
-      )
+          ],
+        ),
+      ),
     );
   }
 }
